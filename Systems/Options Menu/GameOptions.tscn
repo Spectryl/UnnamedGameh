@@ -1,0 +1,245 @@
+[gd_scene format=3 uid="uid://5qar2643oh4g"]
+
+[ext_resource type="Theme" uid="uid://crl6yu3gffw34" path="res://Assets/MainTheme.tres" id="1_e8qdb"]
+[ext_resource type="Script" uid="uid://cfgcq0e8cswc5" path="res://Systems/Options Menu/GameOptions.cs" id="1_nhjnq"]
+[ext_resource type="Script" uid="uid://cht3rl4q1v68i" path="res://Misc/NoFocusButton.cs" id="3_1yn4p"]
+
+[node name="GameOptions" type="Control" unique_id=1439437733]
+texture_filter = 3
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 3
+anchor_right = 0.469
+anchor_bottom = 0.55600005
+offset_right = -0.32000732
+offset_bottom = -0.32003784
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_e8qdb")
+script = ExtResource("1_nhjnq")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=859781342]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=916143889]
+layout_mode = 2
+
+[node name="ScreenShake" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=712221002]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ScreenShakeLabel" type="Label" parent="MarginContainer/VBoxContainer/ScreenShake" unique_id=399864956]
+texture_filter = 3
+layout_mode = 2
+text = "Screen Shake"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScreenShake" unique_id=1210292829]
+layout_mode = 2
+alignment = 1
+
+[node name="ScreenShakeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/ScreenShake/HBoxContainer" unique_id=408861002]
+texture_filter = 3
+custom_minimum_size = Vector2(400, 34)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/ScreenShake/HBoxContainer" unique_id=488581944]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 2
+
+[node name="ScreenShakeLabel" type="Label" parent="MarginContainer/VBoxContainer/ScreenShake/HBoxContainer/Panel" unique_id=53561983]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 6.0
+offset_right = -4.915001
+offset_bottom = -6.3883343
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+text = "100"
+
+[node name="CRT" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=28771557]
+layout_mode = 2
+
+[node name="CRTLabel" type="Label" parent="MarginContainer/VBoxContainer/CRT" unique_id=929356334]
+layout_mode = 2
+text = "CRT Intensity"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CRT" unique_id=1048707824]
+layout_mode = 2
+alignment = 1
+
+[node name="CRTSlider" type="HSlider" parent="MarginContainer/VBoxContainer/CRT/HBoxContainer" unique_id=2020025035]
+custom_minimum_size = Vector2(400, 34)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/CRT/HBoxContainer" unique_id=243416367]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 2
+
+[node name="CRTLabel" type="Label" parent="MarginContainer/VBoxContainer/CRT/HBoxContainer/Panel" unique_id=20226344]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0600001
+anchor_bottom = 0.89100003
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 1.9999962
+offset_bottom = 16.706
+theme_override_font_sizes/font_size = 16
+text = "100"
+
+[node name="Fuzz" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1229974990]
+layout_mode = 2
+alignment = 1
+
+[node name="FuzzLabel" type="Label" parent="MarginContainer/VBoxContainer/Fuzz" unique_id=392248461]
+layout_mode = 2
+text = "Fuzz Intensity"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Fuzz" unique_id=2044904269]
+layout_mode = 2
+alignment = 1
+
+[node name="FuzzSlider" type="HSlider" parent="MarginContainer/VBoxContainer/Fuzz/HBoxContainer" unique_id=1143980705]
+custom_minimum_size = Vector2(400, 34)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/Fuzz/HBoxContainer" unique_id=871648557]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 2
+
+[node name="FuzzLabel" type="Label" parent="MarginContainer/VBoxContainer/Fuzz/HBoxContainer/Panel" unique_id=1524297131]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0600001
+anchor_bottom = 0.89100003
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 1.9999962
+offset_bottom = 16.706
+theme_override_font_sizes/font_size = 16
+text = "100"
+
+[node name="Blur" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1858300954]
+layout_mode = 2
+alignment = 1
+
+[node name="BlurLabel" type="Label" parent="MarginContainer/VBoxContainer/Blur" unique_id=1002816099]
+layout_mode = 2
+text = "Blur Intensity"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Blur" unique_id=675698724]
+layout_mode = 2
+alignment = 1
+
+[node name="BlurSlider" type="HSlider" parent="MarginContainer/VBoxContainer/Blur/HBoxContainer" unique_id=329499941]
+custom_minimum_size = Vector2(400, 34)
+layout_mode = 2
+max_value = 3.0
+step = 0.1
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/Blur/HBoxContainer" unique_id=2100642516]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 2
+
+[node name="BlurLabel" type="Label" parent="MarginContainer/VBoxContainer/Blur/HBoxContainer/Panel" unique_id=462517636]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0600001
+anchor_bottom = 0.89100003
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 1.9999962
+offset_bottom = 16.706
+theme_override_font_sizes/font_size = 16
+text = "100"
+
+[node name="ResetTimer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=908449211]
+layout_mode = 2
+
+[node name="ResetTimerLabel" type="Label" parent="MarginContainer/VBoxContainer/ResetTimer" unique_id=162395190]
+layout_mode = 2
+text = "Reset Timer"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ResetTimer" unique_id=1558179924]
+layout_mode = 2
+alignment = 1
+
+[node name="PanelContainer1" type="PanelContainer" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer" unique_id=66657766]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="Button1" type="Button" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer/PanelContainer1" unique_id=1694399250]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_type_variation = &"SquareButtons"
+text = "1"
+script = ExtResource("3_1yn4p")
+IsTweened = true
+
+[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer" unique_id=1460792581]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer/PanelContainer2" unique_id=1810470480]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_type_variation = &"SquareButtons"
+text = "2"
+script = ExtResource("3_1yn4p")
+IsTweened = true
+
+[node name="PanelContainer3" type="PanelContainer" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer" unique_id=1872084855]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="Button3" type="Button" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer/PanelContainer3" unique_id=1061886287]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_type_variation = &"SquareButtons"
+text = "3"
+script = ExtResource("3_1yn4p")
+IsTweened = true
+
+[node name="PanelContainer4" type="PanelContainer" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer" unique_id=1043786990]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="Button4" type="Button" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer/PanelContainer4" unique_id=726355087]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_type_variation = &"SquareButtons"
+text = "4"
+script = ExtResource("3_1yn4p")
+IsTweened = true
+
+[node name="PanelContainer5" type="PanelContainer" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer" unique_id=877179626]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="Button5" type="Button" parent="MarginContainer/VBoxContainer/ResetTimer/HBoxContainer/PanelContainer5" unique_id=1139448035]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_type_variation = &"SquareButtons"
+text = "5"
+script = ExtResource("3_1yn4p")
+IsTweened = true

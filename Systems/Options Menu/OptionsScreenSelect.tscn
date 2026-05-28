@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://dj4kr0qldtvnt"]
+
+[ext_resource type="Theme" uid="uid://crl6yu3gffw34" path="res://Assets/MainTheme.tres" id="1_fcgyf"]
+[ext_resource type="Script" uid="uid://c3rguv7wkndj6" path="res://Systems/Options Menu/OptionsScreenSelect.cs" id="1_vlxm3"]
+[ext_resource type="Script" uid="uid://cht3rl4q1v68i" path="res://Misc/NoFocusButton.cs" id="2_k30uy"]
+
+[node name="OptionsScreenSelect" type="Control" unique_id=2072311003]
+custom_minimum_size = Vector2(450, 500)
+layout_mode = 3
+anchor_right = 0.35200003
+anchor_bottom = 0.694
+offset_right = -0.5600281
+offset_bottom = 0.32000732
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_fcgyf")
+script = ExtResource("1_vlxm3")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1827958325]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.90000004
+offset_bottom = 3.9999695
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1394272879]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Game" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1688369482]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="GameButton" type="Button" parent="MarginContainer/VBoxContainer/Game" unique_id=1999182861]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Game"
+script = ExtResource("2_k30uy")
+IsTweened = true
+
+[node name="Audio" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=386435430]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="AudioButton" type="Button" parent="MarginContainer/VBoxContainer/Audio" unique_id=306432993]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Audio"
+script = ExtResource("2_k30uy")
+IsTweened = true
+
+[node name="Video" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1439587940]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="VideoButton" type="Button" parent="MarginContainer/VBoxContainer/Video" unique_id=1826370683]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Video"
+script = ExtResource("2_k30uy")
+IsTweened = true
+
+[node name="Controls" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=626018689]
+visible = false
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="ControlsButton" type="Button" parent="MarginContainer/VBoxContainer/Controls" unique_id=2124710022]
+visible = false
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Controls"
+script = ExtResource("2_k30uy")
+IsTweened = true
+
+[node name="MainMenu" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=212700331]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="MainMenuButton" type="Button" parent="MarginContainer/VBoxContainer/MainMenu" unique_id=1992062825]
+visible = false
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Main Menu"
+script = ExtResource("2_k30uy")
+IsTweened = true
+
+[node name="NewRun" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=873254818]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="NewRunButton" type="Button" parent="MarginContainer/VBoxContainer/NewRun" unique_id=1518490678]
+visible = false
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "New Run"
+script = ExtResource("2_k30uy")
+IsTweened = true

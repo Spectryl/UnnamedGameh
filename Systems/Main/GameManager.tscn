@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cxeehelq1ko0b"]
+
+[ext_resource type="Script" uid="uid://wt0iemn4wiim" path="res://Systems/Main/GameManager.cs" id="1_f8wt2"]
+[ext_resource type="PackedScene" uid="uid://c0ovlvxu3ufyq" path="res://Systems/Options Menu/OptionsScreenManager.tscn" id="2_2k3fo"]
+
+[node name="GameManager" type="Node" unique_id=1297276202]
+script = ExtResource("1_f8wt2")
+
+[node name="Camera" type="Camera3D" parent="." unique_id=1524599809]
+
+[node name="OptionsScreenManager" parent="." unique_id=142157606 instance=ExtResource("2_2k3fo")]

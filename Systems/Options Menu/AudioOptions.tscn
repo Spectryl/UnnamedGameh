@@ -1,0 +1,134 @@
+[gd_scene format=3 uid="uid://cox0febp4w6s6"]
+
+[ext_resource type="Script" uid="uid://dqqmvun44vb4x" path="res://Systems/Options Menu/AudioOptions.cs" id="1_jn212"]
+[ext_resource type="Theme" uid="uid://crl6yu3gffw34" path="res://Assets/MainTheme.tres" id="1_wkelr"]
+
+[node name="AudioOptions" type="Control" unique_id=1488221276]
+custom_minimum_size = Vector2(580, 320)
+layout_mode = 3
+anchor_right = 0.453
+anchor_bottom = 0.44400004
+offset_right = -579.84
+offset_bottom = -319.68002
+theme = ExtResource("1_wkelr")
+script = ExtResource("1_jn212")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1845927274]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=328058447]
+layout_mode = 2
+theme_override_constants/separation = 30
+metadata/_edit_use_anchors_ = true
+
+[node name="MasterVolume" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1840859785]
+layout_mode = 2
+
+[node name="MasterVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/MasterVolume" unique_id=1795882269]
+layout_mode = 2
+text = "Master Volume"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MasterVolume" unique_id=1429140846]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="MasterVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/MasterVolume/HBoxContainer" unique_id=1201786261]
+custom_minimum_size = Vector2(500, 34)
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/MasterVolume/HBoxContainer" unique_id=1268383116]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 2
+
+[node name="MasterVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/MasterVolume/HBoxContainer/Panel" unique_id=1900829797]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 46.0
+offset_bottom = 49.0
+theme_override_font_sizes/font_size = 16
+text = "100"
+
+[node name="MusicVolume" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=274881696]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="MusicVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/MusicVolume" unique_id=757619796]
+layout_mode = 2
+text = "Music Volume"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MusicVolume" unique_id=1495112895]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="MusicVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/MusicVolume/HBoxContainer" unique_id=271484993]
+custom_minimum_size = Vector2(500, 34)
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/MusicVolume/HBoxContainer" unique_id=764605698]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 2
+
+[node name="MusicVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/MusicVolume/HBoxContainer/Panel" unique_id=38060301]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 46.0
+offset_bottom = 49.0
+theme_override_font_sizes/font_size = 16
+text = "100"
+
+[node name="GameVolume" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1189941832]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="GameVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/GameVolume" unique_id=1376077586]
+layout_mode = 2
+text = "Game Volume"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GameVolume" unique_id=1022285703]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="GameVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/GameVolume/HBoxContainer" unique_id=516201243]
+custom_minimum_size = Vector2(500, 34)
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/GameVolume/HBoxContainer" unique_id=1702739826]
+custom_minimum_size = Vector2(50, 33)
+layout_mode = 2
+
+[node name="GameVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/GameVolume/HBoxContainer/Panel" unique_id=681193557]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 46.0
+offset_bottom = 49.0
+theme_override_font_sizes/font_size = 16
+text = "100"

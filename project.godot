@@ -11,11 +11,26 @@ config_version=5
 [application]
 
 config/name="UntitledGameh"
-config/features=PackedStringArray("4.6", "Forward Plus")
+run/main_scene="uid://cxeehelq1ko0b"
+config/features=PackedStringArray("4.6", "C#", "Forward Plus")
+
+[audio]
+
+buses/default_bus_layout="uid://7taifdyciboj"
 
 [dotnet]
 
 project/assembly_name="UntitledGameh"
+
+[file_customization]
+
+folder_colors={
+"res://Assets/": "orange",
+"res://Entities/": "yellow",
+"res://Misc/": "green",
+"res://Project Files/": "blue",
+"res://Systems/": "purple"
+}
 
 [physics]
 

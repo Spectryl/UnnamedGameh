@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://c0ovlvxu3ufyq"]
+
+[ext_resource type="Script" uid="uid://8nvuy1lxttc7" path="res://Systems/Options Menu/OptionsScreenManager.cs" id="1_iv7wt"]
+[ext_resource type="Theme" uid="uid://crl6yu3gffw34" path="res://Assets/MainTheme.tres" id="1_ujnkn"]
+[ext_resource type="Script" uid="uid://cht3rl4q1v68i" path="res://Misc/NoFocusButton.cs" id="3_bg8aw"]
+[ext_resource type="Script" uid="uid://o4jbb4kqsj43" path="res://Misc/TweenContainer.cs" id="3_ujnkn"]
+
+[sub_resource type="Gradient" id="Gradient_irktu"]
+offsets = PackedFloat32Array(0, 0.98545456)
+colors = PackedColorArray(0.5563933, 0, 0.66668326, 1, 1, 0, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg8aw"]
+gradient = SubResource("Gradient_irktu")
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[node name="OptionsScreenManager" type="Control" unique_id=142157606]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ujnkn")
+script = ExtResource("1_iv7wt")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=2006309369]
+custom_minimum_size = Vector2(512, 576)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.305
+anchor_top = 0.089
+anchor_right = 0.68600005
+anchor_bottom = 0.88900006
+offset_left = -22.400024
+offset_top = -0.08000183
+offset_right = 1.9199219
+offset_bottom = -0.08001709
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"PanelContainerCopyPanel"
+script = ExtResource("3_ujnkn")
+TransitionDuration = 0.7
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1881456826]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer" unique_id=22838265]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = 19
+theme_override_constants/margin_bottom = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer/MarginContainer" unique_id=480826136]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="PanelTopColor" type="TextureRect" parent="PanelContainer/VBoxContainer/MarginContainer/PanelContainer" unique_id=264015828]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_bg8aw")
+
+[node name="Buttons" type="MarginContainer" parent="PanelContainer/VBoxContainer/MarginContainer/PanelContainer" unique_id=1023686903]
+layout_mode = 2
+theme_override_constants/margin_right = 11
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/MarginContainer/PanelContainer/Buttons" unique_id=1130129910]
+layout_mode = 2
+alignment = 2
+
+[node name="Back" type="PanelContainer" parent="PanelContainer/VBoxContainer/MarginContainer/PanelContainer/Buttons/HBoxContainer" unique_id=1486590849]
+custom_minimum_size = Vector2(60, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="BackButton" type="Button" parent="PanelContainer/VBoxContainer/MarginContainer/PanelContainer/Buttons/HBoxContainer/Back" unique_id=227420782]
+texture_filter = 3
+layout_mode = 2
+theme_type_variation = &"SquareButtons"
+theme_override_font_sizes/font_size = 12
+text = "BACK"
+script = ExtResource("3_bg8aw")
+IsTweened = true
+
+[node name="Close" type="PanelContainer" parent="PanelContainer/VBoxContainer/MarginContainer/PanelContainer/Buttons/HBoxContainer" unique_id=1680184733]
+custom_minimum_size = Vector2(60, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"PanelContainerButtonShadow"
+
+[node name="QuitButton" type="Button" parent="PanelContainer/VBoxContainer/MarginContainer/PanelContainer/Buttons/HBoxContainer/Close" unique_id=1329182735]
+layout_mode = 2
+theme_type_variation = &"SquareButtons"
+theme_override_font_sizes/font_size = 14
+text = "X"
+script = ExtResource("3_bg8aw")
+IsTweened = true
+
+[node name="Label" type="MarginContainer" parent="PanelContainer/VBoxContainer/MarginContainer/PanelContainer" unique_id=439153455]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+
+[node name="OptionsLabel" type="Label" parent="PanelContainer/VBoxContainer/MarginContainer/PanelContainer/Label" unique_id=1736827581]
+layout_mode = 2
+text = "Options"
