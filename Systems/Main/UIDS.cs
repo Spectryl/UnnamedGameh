@@ -1,5 +1,13 @@
 public static partial class UIDS {
 
+    // Core Logic
+    public static string MainMenu           = "uid://bqv8yslakfos5";
+    public static string Game               = "";
+
+    // Main Menu Submenus
+    public static string TitleScreen        = "uid://cshj62srbydfl";
+
+
 
     public static string OptionsScreen      = "uid://c0ovlvxu3ufyq";
     // Options Screen Submenus

@@ -18,18 +18,17 @@ public partial class GameManager : Node {
 		get {return _CurrentState;}
 		set {
 			_CurrentState = value;
-			switch(CurrentState) {
-				//  CurrentScene?.QueueFree();
-				// _CurrentScene = ???;
-				case GameState.MAIN_MENU:
-					break;
-				case GameState.GAME:
-					break;
-			}
+			_CurrentScene?.QueueFree();
+			_CurrentScene = value switch {
+				GameState.MAIN_MENU => GD.Load<PackedScene>(UIDS.MainMenu).Instantiate(),
+				GameState.GAME      => GD.Load<PackedScene>(UIDS.Game).Instantiate()
+			};
+			AddChild(_CurrentScene);
 			StateChanged?.Invoke();
 		}
 	}
 
+	private CanvasLayer OptionsMenuLayer;
 	private Node _CurrentScene;
 	private GameState _CurrentState;
 	private Tween _OptionsTween;
@@ -42,7 +41,8 @@ public partial class GameManager : Node {
 			return;
 		}
 		Instance = this;
-		Camera = (Camera3D) GetNode<Camera3D>("Camera"); 
+		Camera = (Camera3D) GetNode<Camera3D>("Camera");
+		OptionsMenuLayer = GetNode<CanvasLayer>("OptionsMenuCanvasLayer");
 		GetViewport().UseHdr2D = true;
 		SetupPersisentFileManager();
 		CurrentState = GameState.MAIN_MENU;
@@ -57,18 +57,17 @@ public partial class GameManager : Node {
 	private void ToggleOptionsScreen() {
         _OptionsTween?.Kill();
         if (IsOptionsScreenOpen) {
-            _OptionsTween = OptionsScreenManager.CreateTween();
-            _OptionsTween.TweenProperty(OptionsScreenManager, "scale", Vector2.Zero, 0.25f)
-			.SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.In);
-            _OptionsTween.Parallel().TweenProperty(OptionsScreenManager, "modulate:a", 0.0f, 0.2f);
-			_OptionsTween.TweenCallback(Callable.From(() => {
-				OptionsScreenManager.QueueFree();
-				OptionsScreenManager = null;
-			}));
+			OptionsScreenManager CurrentOptions = OptionsScreenManager;
+			OptionsScreenManager = null;
+			Tween closingTween = CurrentOptions.CreateTween();
+			closingTween.TweenProperty(CurrentOptions, "scale", Vector2.Zero, 0.25f)
+				.SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.In);
+			closingTween.Parallel().TweenProperty(CurrentOptions, "modulate:a", 0.0f, 0.2f);
+			closingTween.TweenCallback(Callable.From(() => CurrentOptions.QueueFree()));
         } else {
 			PackedScene scene = GD.Load<PackedScene>(UIDS.OptionsScreen);
 			OptionsScreenManager = (OptionsScreenManager) scene.Instantiate();
-			AddChild(OptionsScreenManager);
+			OptionsMenuLayer.AddChild(OptionsScreenManager);
 			OptionsScreenManager.PivotOffset = OptionsScreenManager.Size / 2;
 			OptionsScreenManager.Scale = Vector2.Zero;
 			OptionsScreenManager.Modulate = new Color(1, 1, 1, 0);

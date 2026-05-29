@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bqv8yslakfos5"]
+
+[ext_resource type="Script" uid="uid://cbn7alfq15idt" path="res://Systems/Main Menu/MainMenu.cs" id="1_81uwn"]
+
+[node name="Main Menu" type="Node3D" unique_id=1129084937]
+script = ExtResource("1_81uwn")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1676303827]
+
+[node name="Background" type="Node3D" parent="." unique_id=2121593455]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1726362342]

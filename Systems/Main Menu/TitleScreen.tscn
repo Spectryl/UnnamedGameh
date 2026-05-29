@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://cshj62srbydfl"]
+
+[ext_resource type="Script" uid="uid://b7jhcmpbsj1vq" path="res://Systems/Main Menu/TitleScreen.cs" id="1_poswb"]
+
+[node name="TitleScreen" type="Control" unique_id=1828893569]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_poswb")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=671498692]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 0
+offset_left = 440.0
+offset_top = 260.0
+offset_right = 840.0
+offset_bottom = 460.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1215059009]
+layout_mode = 2
+alignment = 1
+
+[node name="Play" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=53472528]
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer/Play" unique_id=323929968]
+layout_mode = 2
+text = "Play"
+
+[node name="Options" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1532558675]
+layout_mode = 2
+
+[node name="OptionsButton" type="Button" parent="MarginContainer/VBoxContainer/Options" unique_id=2010250712]
+layout_mode = 2
+text = "Options"
+
+[node name="Credits" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=888669630]
+layout_mode = 2
+
+[node name="CreditsButton" type="Button" parent="MarginContainer/VBoxContainer/Credits" unique_id=658697972]
+layout_mode = 2
+text = "Credits"
+
+[node name="Quit" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=2036165761]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="MarginContainer/VBoxContainer/Quit" unique_id=610623049]
+layout_mode = 2
+text = "Quit"
+
+[node name="Version" type="MarginContainer" parent="." unique_id=1169357035]
+layout_mode = 0
+offset_top = 669.0
+offset_right = 100.0
+offset_bottom = 719.0
+
+[node name="VersionLabel" type="Label" parent="Version" unique_id=1226371819]
+layout_mode = 2
+text = "Version Text"
+horizontal_alignment = 1
