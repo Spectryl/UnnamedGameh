@@ -26,7 +26,8 @@ public partial class OptionsScreenSelect : OptionsSubMenu {
 
     private void ReturnToTitleScreen() {
         //GameManager.Instance.HideOptionsScreen();
-        GameManager.Instance.ChangeState(GameManager.GameState.MAIN_MENU);
+        //GameManager.Instance.ChangeState(GameManager.GameState.MAIN_MENU);
+        return;
     }
 
 }

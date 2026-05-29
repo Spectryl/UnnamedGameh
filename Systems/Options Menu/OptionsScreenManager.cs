@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public partial class OptionsScreenManager : Control {
-    public bool IsOptionsOpen;
-    public Action OptionScreenToggled;
     private OptionsSubMenu CurrentMenu;
     private Button QuitButton;
     private Button BackButton;
@@ -15,7 +13,6 @@ public partial class OptionsScreenManager : Control {
     private Tween BackButtonTween;
     private TextureRect TopPanel;
     private static Dictionary<OptionsMenuID, PackedScene> MenuCache = new();
-    private Tween OptionsTween;
     public enum OptionsMenuID {
         OPTION_SELECT,
         GAME,
@@ -30,9 +27,8 @@ public partial class OptionsScreenManager : Control {
         MainPanel  = GetNode<VBoxContainer>("PanelContainer/VBoxContainer");
         TopPanel   = GetNode<TextureRect>("PanelContainer/VBoxContainer/MarginContainer/PanelContainer/PanelTopColor");
         BackButtonContainer.Visible = false;
-        QuitButton.Pressed += () => OptionScreenToggled.Invoke();
+        QuitButton.Pressed += CloseOptionsScreen;
         BackButton.Pressed += SwitchToSelectScreen;
-        OptionScreenToggled += ToggleOptionsScreen;
         SetupOptionsCache();
         SwitchMenu(OptionsMenuID.OPTION_SELECT);
     }
@@ -78,6 +74,10 @@ public partial class OptionsScreenManager : Control {
         SwitchMenu(OptionsMenuID.VIDEO);
     }
 
+    private void CloseOptionsScreen() => GameManager.OptionScreenToggled?.Invoke();
+
+    
+
     private async void SwitchMenu(OptionsMenuID menuID) {
         if (!MenuCache.TryGetValue(menuID, out PackedScene sceneToLoad)) return;
         OptionsSubMenu newMenu = await Task.Run(() => (OptionsSubMenu)sceneToLoad.Instantiate());
@@ -94,21 +94,6 @@ public partial class OptionsScreenManager : Control {
         tween.TweenProperty(newMenu, "scale", Vector2.One, 0.35f);
     }
 
-
-    private void ToggleOptionsScreen() {
-        IsOptionsOpen = !IsOptionsOpen;
-        if (IsOptionsOpen) {
-            Position = Vector2.Zero;
-		    Scale = Vector2.Zero;
-            OptionsTween?.Kill();
-            OptionsTween = this.CreateTween();
-            OptionsTween.TweenProperty(this, "scale", Vector2.One, 0.4f)
-            .SetTrans(Tween.TransitionType.Back).SetEase(Tween.EaseType.Out);
-            this.Modulate = new Color(1, 1, 1, 0);
-            OptionsTween.Parallel().TweenProperty(this, "modulate:a", 1.0f, 0.2f);
-        }
-        PersistentFileManager.Settings.Save(PersistentFileManager.SettingsPath);
-    }
     private void UpdatePanelTopColor(Color newColor) {
         GradientTexture2D gradTexture = (GradientTexture2D) TopPanel.Texture;
         Gradient grad = gradTexture.Gradient;
