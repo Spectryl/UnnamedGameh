@@ -28,14 +28,20 @@ window/size/viewport_height=720
 
 project/assembly_name="UntitledGameh"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gd-blender-3d-shortcuts/plugin.cfg")
+
 [file_customization]
 
 folder_colors={
 "res://Assets/": "orange",
 "res://Entities/": "yellow",
+"res://Levels/": "pink",
 "res://Misc/": "green",
 "res://Project Files/": "blue",
-"res://Systems/": "purple"
+"res://Systems/": "purple",
+"res://addons/": "gray"
 }
 
 [input]

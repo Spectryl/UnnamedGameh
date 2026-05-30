@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://c2ydyfyiht6hp"]
+
+[ext_resource type="Texture2D" uid="uid://dpn2cmn7w0bw5" path="res://addons/kenney_prototype_textures/dark/texture_07.png" id="1_iybhw"]
+[ext_resource type="PackedScene" uid="uid://c7t4yrkqkmd7s" path="res://Entities/Player/Player.tscn" id="3_ujh0g"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_d062v"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_ujh0g"]
+sky_material = SubResource("ProceduralSkyMaterial_d062v")
+
+[sub_resource type="Environment" id="Environment_r846q"]
+background_mode = 2
+sky = SubResource("Sky_ujh0g")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d062v"]
+albedo_texture = ExtResource("1_iybhw")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3wipj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ujh0g"]
+uv1_triplanar = true
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iybhw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d062v"]
+size = Vector3(2, 0.1, 2)
+
+[node name="TestLevel" type="Node" unique_id=1809980071]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=554977252]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=881580501]
+environment = SubResource("Environment_r846q")
+
+[node name="Level" type="Node3D" parent="." unique_id=1703216670]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level" unique_id=1937497561]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, -0.019000001, 0)
+material_override = SubResource("StandardMaterial3D_d062v")
+mesh = SubResource("PlaneMesh_3wipj")
+surface_material_override/0 = SubResource("StandardMaterial3D_ujh0g")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Level/MeshInstance3D" unique_id=417287062]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, -0.5070003, 0.536)
+physics_material_override = SubResource("PhysicsMaterial_iybhw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/MeshInstance3D/StaticBody3D" unique_id=889783097]
+shape = SubResource("BoxShape3D_d062v")
+
+[node name="Player" parent="." unique_id=784426352 instance=ExtResource("3_ujh0g")]

@@ -2,7 +2,7 @@ public static partial class UIDS {
 
     // Core Logic
     public static string MainMenu           = "uid://bqv8yslakfos5";
-    public static string Game               = "";
+    public static string Game               = "uid://c2ydyfyiht6hp";
 
     // Main Menu Submenus
     public static string TitleScreen        = "uid://cshj62srbydfl";
