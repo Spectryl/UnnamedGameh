@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class TitleScreen : Control {
+public partial class TitleScreen : MainMenuSubMenu {
 
 
 	private MarginContainer _ButtonContainer;
@@ -26,7 +26,7 @@ public partial class TitleScreen : Control {
 		SetupVersionText();
     }
 
-	private void Play() => GameManager.Instance.CurrentState = GameManager.GameState.GAME; 
+	private void Play() => MainMenu.CurrentState = MainMenu.SubMenu.JOIN; 
 	private void Options() => GameManager.OptionScreenToggled.Invoke();
 	private void Credits() {}
 	private void Quit() => GetTree().Quit();

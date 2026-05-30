@@ -4,6 +4,7 @@ using System;
 public partial class MainMenu : Node3D {
 	public enum SubMenu {
 		TITLE_SCREEN,
+		JOIN,
 		OPTIONS,
 		CREDITS,
 		EXTRAS
@@ -13,16 +14,18 @@ public partial class MainMenu : Node3D {
 		set {
 			_CurrentMenu?.QueueFree();
 			_CurrentMenu = value switch {
-				SubMenu.TITLE_SCREEN => (Control) GD.Load<PackedScene>(UIDS.TitleScreen).Instantiate(),
+				SubMenu.TITLE_SCREEN => (MainMenuSubMenu) GD.Load<PackedScene>(UIDS.TitleScreen).Instantiate(),
+				SubMenu.JOIN         => (MainMenuSubMenu) GD.Load<PackedScene>(UIDS.JoinMenu).Instantiate(),
 			};
-			MainMenuCanvasLayer.AddChild(_CurrentMenu);
+			_CurrentMenu.MainMenu = this;
+			_MainMenuCanvasLayer.AddChild(_CurrentMenu);
 		}
 	}
-	private CanvasLayer MainMenuCanvasLayer;
+	private CanvasLayer _MainMenuCanvasLayer;
 	private SubMenu _CurrentState;
-	private Control _CurrentMenu;
+	private MainMenuSubMenu _CurrentMenu;
 	public override void _Ready() {
-		MainMenuCanvasLayer = GetNode<CanvasLayer>("UI");
+		_MainMenuCanvasLayer = GetNode<CanvasLayer>("UI");
 		CurrentState = SubMenu.TITLE_SCREEN;
 
 	}

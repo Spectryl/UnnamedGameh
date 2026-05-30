@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://dt33l8luvib0b"]
+
+[ext_resource type="Script" uid="uid://rus7serk0f83" path="res://Systems/Main Menu/JoinMenu.cs" id="1_ngimi"]
+
+[node name="JoinMenu" type="Control" unique_id=320303364]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ngimi")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1004723892]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 415.0
+offset_top = 160.0
+offset_right = -415.0
+offset_bottom = -160.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=1608350531]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer" unique_id=714505023]
+layout_mode = 2
+alignment = 1
+
+[node name="HostButton" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=592621756]
+layout_mode = 2
+text = "HOST"
+
+[node name="JoinButton" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=783711902]
+layout_mode = 2
+text = "JOIN"
+
+[node name="IPEntry" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=1789871626]
+layout_mode = 2
+placeholder_text = "IP"
+alignment = 1
+
+[node name="PortEntry" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=1108258607]
+layout_mode = 2
+placeholder_text = "PORT"
+alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=1308287280]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 0
+offset_left = 1.0
+offset_top = 669.0
+offset_right = 101.0
+offset_bottom = 719.0
+
+[node name="BackButton" type="Button" parent="MarginContainer2" unique_id=829805117]
+layout_mode = 2
+text = "Back
+"
