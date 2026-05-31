@@ -5,6 +5,7 @@ public partial class GameManager : Node {
 	public static GameManager Instance {get; private set;}
 	public static PersistentFileManager PersistentFileManager {get; private set;}
 	public static OptionsScreenManager OptionsScreenManager  {get; private set;}
+	public static ServerManager        ServerManager          {get; private set;}
 	public static Camera3D Camera;
 	public static event Action StateChanged;
 	public static bool IsOptionsScreenOpen;
@@ -45,18 +46,17 @@ public partial class GameManager : Node {
 		_OptionsMenuLayer = GetNode<CanvasLayer>("OptionsMenuCanvasLayer");
 		GetViewport().UseHdr2D = true;
 		SetupPersisentFileManager();
+		SetupServerManager();
 		CurrentState = GameState.MAIN_MENU;
 		OptionScreenToggled += ToggleOptionsScreen;
 	}
     public override void _UnhandledInput(InputEvent @event) {
         if (Input.IsActionJustPressed("Pause")) ToggleOptionsScreen();
     }
-	/// <summary>
-	/// Toggles The Option Screen on and off based on player input, handled by GameManager so Pausing is Always Available
-	/// </summary>
 	private void ToggleOptionsScreen() {
         _OptionsTween?.Kill();
         if (IsOptionsScreenOpen) {
+			Input.MouseMode = Input.MouseModeEnum.Captured;
 			OptionsScreenManager CurrentOptions = OptionsScreenManager;
 			OptionsScreenManager = null;
 			Tween closingTween = CurrentOptions.CreateTween();
@@ -65,6 +65,7 @@ public partial class GameManager : Node {
 			closingTween.Parallel().TweenProperty(CurrentOptions, "modulate:a", 0.0f, 0.2f);
 			closingTween.TweenCallback(Callable.From(() => CurrentOptions.QueueFree()));
         } else {
+			Input.MouseMode = Input.MouseModeEnum.Visible;
 			PackedScene scene = GD.Load<PackedScene>(UIDS.OptionsScreen);
 			OptionsScreenManager = (OptionsScreenManager) scene.Instantiate();
 			_OptionsMenuLayer.AddChild(OptionsScreenManager);
@@ -81,5 +82,9 @@ public partial class GameManager : Node {
 		PersistentFileManager.Settings.Save(PersistentFileManager.SettingsPath);
     }
 	private void SetupPersisentFileManager() => PersistentFileManager = new PersistentFileManager();
+	private void SetupServerManager() {
+		ServerManager = new ServerManager();
+		AddChild(ServerManager);
+	}
 	
 }

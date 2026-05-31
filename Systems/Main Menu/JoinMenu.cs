@@ -15,15 +15,20 @@ public partial class JoinMenu : MainMenuSubMenu {
 		_IPEntry    = GetNode<LineEdit>("MarginContainer/PanelContainer/VBoxContainer/IPEntry");
 		_PortEntry  = GetNode<LineEdit>("MarginContainer/PanelContainer/VBoxContainer/PortEntry");
 		
+		_HostButton.Pressed += OnHostButtonPressed;
+		_JoinButton.Pressed += OnJoinButtonPressed;
 		_BackButton.Pressed += OnBackButtonPressed;
 	}
 
 	public void OnHostButtonPressed() {
+		GameManager.Instance.CurrentState = GameManager.GameState.GAME;
+		ServerManager.Instance.CreateServer();
 		
 	}
 	
 	public void OnJoinButtonPressed() {
-		
+		GameManager.Instance.CurrentState = GameManager.GameState.GAME;
+		NetworkManager.JoinServer();
 	}
 	public void OnBackButtonPressed() => MainMenu.CurrentState = MainMenu.SubMenu.TITLE_SCREEN;
 }

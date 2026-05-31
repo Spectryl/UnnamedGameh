@@ -12,11 +12,15 @@ public partial class Player : CharacterBody3D {
 		_Mesh = GetNode<MeshInstance3D>("MeshInstance3D");
 		_CollisionShape = GetNode<CollisionShape3D>("CollisionShape3D");
 		_Camera = GetNode<Camera3D>("Camera3D");
+		SetMultiplayerAuthority(int.Parse(Name));
 		if (_Mesh.Mesh is CapsuleMesh capsuleMesh && _CollisionShape.Shape is CapsuleShape3D capsuleShape) {
 			capsuleShape.Radius = capsuleMesh.Radius;
 			capsuleShape.Height = capsuleMesh.Height;
 		} 
-		_Camera.MakeCurrent();
+		if (IsMultiplayerAuthority()) {
+			_Camera.MakeCurrent();
+			Input.MouseMode = Input.MouseModeEnum.Captured;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta) {
@@ -53,6 +57,7 @@ public partial class Player : CharacterBody3D {
 		MoveAndSlide();
 	}
     public override void _UnhandledInput(InputEvent @event) {
+		if (!IsMultiplayerAuthority()) return;
         if (@event is InputEventMouseMotion mouseMovement) {
 			RotateY(-mouseMovement.Relative.X * 0.005f);
 			_Camera.RotateX(-mouseMovement.Relative.Y * 0.005f);
