@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://cw8s1kaccec10"]
+
+[ext_resource type="Script" uid="uid://ctv4r66l42nvj" path="res://Systems/Chat/ChatMenu.cs" id="1_g43ss"]
+
+[node name="ChatMenu" type="Control" unique_id=1535168622]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g43ss")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=988259840]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 455.0
+offset_right = 482.0
+offset_bottom = 705.0
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=97539192]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer" unique_id=266813849]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=1907347715]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="ChatHistoryContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/ScrollContainer" unique_id=1478921340]
+layout_mode = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=3146855]
+layout_mode = 2
+alignment = 1
+
+[node name="MessageEntry" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1356428586]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+placeholder_text = "Enter Chat Message Here"
+
+[node name="SubmitButton" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1525858377]
+layout_mode = 2
+text = "X"

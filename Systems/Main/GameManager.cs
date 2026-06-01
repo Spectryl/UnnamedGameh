@@ -56,7 +56,7 @@ public partial class GameManager : Node {
 	private void ToggleOptionsScreen() {
         _OptionsTween?.Kill();
         if (IsOptionsScreenOpen) {
-			Input.MouseMode = Input.MouseModeEnum.Captured;
+			if (CurrentState != GameState.GAME) Input.MouseMode = Input.MouseModeEnum.Captured;
 			OptionsScreenManager CurrentOptions = OptionsScreenManager;
 			OptionsScreenManager = null;
 			Tween closingTween = CurrentOptions.CreateTween();

@@ -2,17 +2,6 @@ using Godot;
 using System;
 
 public partial class Level : Node {
-	public override void _Ready() {
-        ServerManager.OnPlayerConnected += CreatePlayer;
-        ServerManager.OnPlayerDisconnected += RemovePlayer;
-    }
-
-    public override void _ExitTree() {
-        ServerManager.OnPlayerConnected -= CreatePlayer;
-        ServerManager.OnPlayerDisconnected -= RemovePlayer;
-    }
-
-
 	private void CreatePlayer(int id) {
 		Player newPlayer = (Player) GD.Load<PackedScene>(UIDS.Player).Instantiate();
 		newPlayer.Name = id.ToString();

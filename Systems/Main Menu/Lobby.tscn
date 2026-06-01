@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://rvaaapdgcyf"]
+
+[ext_resource type="Script" uid="uid://dm0m4ngyyk7gn" path="res://Systems/Main Menu/Lobby.cs" id="1_gix7m"]
+[ext_resource type="PackedScene" uid="uid://cw8s1kaccec10" path="res://Systems/Chat/ChatMenu.tscn" id="2_ybn4o"]
+
+[node name="Lobby" type="Control" unique_id=1402021857]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gix7m")
+
+[node name="ChatMenu" parent="." unique_id=1535168622 instance=ExtResource("2_ybn4o")]
+layout_mode = 1
