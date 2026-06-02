@@ -49,6 +49,7 @@ public partial class ServerManager : Node {
 	private void RpcCloseServer() => ResetServerState();
 
 	private void ResetServerState() {
+		GameManager.Instance.Multiplayer.MultiplayerPeer.Close();
 		GameManager.Instance.Multiplayer.MultiplayerPeer = null;
 		NetworkManager.CurrentPlayerCount = 0;
 		Array.Clear(PlayerDataList, 0, PlayerDataList.Length);
