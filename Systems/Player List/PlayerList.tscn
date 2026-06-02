@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cedm8a554nvfy"]
+
+[ext_resource type="Script" uid="uid://cn1do8l3xb7ra" path="res://Systems/Player List/PlayerList.cs" id="1_thpab"]
+
+[node name="PlayerList" type="Control" unique_id=1252831675]
+layout_mode = 3
+anchor_right = 0.15400001
+anchor_bottom = 0.216
+offset_right = -197.12003
+offset_bottom = -155.52
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_thpab")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=629614817]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 1
+offset_right = 200.0
+offset_bottom = 158.0
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=269390755]
+layout_mode = 2
+
+[node name="PlayerListContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer" unique_id=653971410]
+layout_mode = 2

@@ -7,11 +7,12 @@ public partial class ServerManager : Node {
 	public static PlayerData[] PlayerDataList = new PlayerData[NetworkManager.MaxPlayerCount];
 	public static string Username = GD.RandRange(0,1000).ToString();
 	public static Action<String, String> ChatMessageSent;
+	public static Action PlayerListUpdated;
 
     public override void _Ready() {
         Instance = this;
         //GameManager.Instance.Multiplayer.PeerConnected += OnPeerConnected;
-        //GameManager.Instance.Multiplayer.PeerDisconnected += OnPeerDisconnected;
+        GameManager.Instance.Multiplayer.PeerDisconnected += OnPeerDisconnected;
 		GameManager.Instance.Multiplayer.ConnectedToServer += OnPeerConnectedToServer;
     }
 
@@ -19,6 +20,38 @@ public partial class ServerManager : Node {
 		NetworkManager.CreateServer();
 		NetworkManager.CurrentPlayerCount = 0;
 		AddPlayerToList(1, Username);
+		PlayerListUpdated?.Invoke();
+	}
+	public void CloseServer() {
+		if (!IsHost()) return;
+		Rpc(nameof(RpcCloseServer));
+		GameManager.Instance.Multiplayer.MultiplayerPeer = null;
+		NetworkManager.CurrentPlayerCount = 0;
+		Array.Clear(PlayerDataList, 0, PlayerDataList.Length);
+	}
+	public void LeaveServer() {
+		GameManager.Instance.Multiplayer.MultiplayerPeer = null;
+		NetworkManager.CurrentPlayerCount = 0;
+		Array.Clear(PlayerDataList, 0, PlayerDataList.Length);
+	}
+	[Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
+	private void RpcCloseServer() {
+		GameManager.Instance.Multiplayer.MultiplayerPeer = null;
+		NetworkManager.CurrentPlayerCount = 0;
+		Array.Clear(PlayerDataList, 0, PlayerDataList.Length);
+	}
+	private void OnPeerDisconnected(long id) {
+		if (!IsHost()) return;
+		for (int i = 0; i < NetworkManager.CurrentPlayerCount; i++){
+			if (PlayerDataList[i].Id == id) {
+				for (int j = i; j < NetworkManager.CurrentPlayerCount - 1; j++) {
+					PlayerDataList[j] = PlayerDataList[j+1];
+				}
+				PlayerDataList[--NetworkManager.CurrentPlayerCount] = null;
+				break;
+			}
+		}
+		BroadcastPlayerList();
 	}
 	private void OnPeerConnectedToServer() {
 		GD.Print("Peer has connected to server");
@@ -46,15 +79,18 @@ public partial class ServerManager : Node {
 			usernames[i] = PlayerDataList[i].Username;
 		}
 		Rpc(nameof(RpcSyncPlayerList), ids, usernames);
+		PlayerListUpdated?.Invoke();
 	}	
 
 	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
     private void RpcSyncPlayerList(int[] ids, string[] usernames) {
         GD.Print("Syncing player list, count: ", ids.Length);
-        NetworkManager.CurrentPlayerCount = ids.Length;
+        NetworkManager.CurrentPlayerCount = 0;
+		Array.Clear(PlayerDataList, 0, PlayerDataList.Length);
         for (int i = 0; i < ids.Length; i++) {
-            PlayerDataList[i] = new PlayerData(ids[i], usernames[i]);
+			AddPlayerToList(ids[i],usernames[i]);
         }
+		PlayerListUpdated?.Invoke();
     }
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = (int)NetworkManager.ChannelEnum.CHAT)]
@@ -72,7 +108,7 @@ public partial class ServerManager : Node {
 	public bool IsHost() {
 		return GameManager.Instance.Multiplayer.GetUniqueId() == 1;
 	}
-	private string GetUsernameById(int id) {
+	public static string GetUsernameById(int id) {
 		for (int i = 0; i < NetworkManager.CurrentPlayerCount; i++) {
 			if (PlayerDataList[i].Id == id) return PlayerDataList[i].Username;
 		}
