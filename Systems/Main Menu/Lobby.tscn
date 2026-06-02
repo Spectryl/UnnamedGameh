@@ -15,6 +15,13 @@ script = ExtResource("1_gix7m")
 
 [node name="ChatMenu" parent="." unique_id=1535168622 instance=ExtResource("2_ybn4o")]
 layout_mode = 1
+anchor_top = 0.63100004
+anchor_right = 0.36100003
+anchor_bottom = 0.97300005
+offset_left = 14.0
+offset_top = -0.32003784
+offset_right = -448.08005
+offset_bottom = -246.56006
 
 [node name="PlayerList" parent="." unique_id=1252831675 instance=ExtResource("3_nus5y")]
 layout_mode = 1
@@ -26,3 +33,12 @@ offset_left = 0.63999176
 offset_top = 0.3599968
 offset_right = -197.76001
 offset_bottom = -149.40001
+
+[node name="PlayerCount" type="Label" parent="." unique_id=31287068]
+layout_mode = 0
+offset_left = 115.0
+offset_top = 23.0
+offset_right = 309.0
+offset_bottom = 67.0
+text = "Player List (0)"
+horizontal_alignment = 1

@@ -14,7 +14,20 @@ public partial class ChatMenu : Control {
 		_SubmitButton = GetNode<Button>("MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/SubmitButton");
 		ServerManager.ChatMessageSent += AddMessage;
 		_SubmitButton.Pressed += OnSubmitButtonPressed;
+		_ChatEntry.TextSubmitted += OnChatEntrySubmitted;
+		_ChatEntry.KeepEditingOnTextSubmit = true;
+		
 	}
+    public override void _UnhandledInput(InputEvent @event) {
+        if (@event.IsActionPressed("ToggleChat") && !_ChatEntry.HasFocus()) {
+			_ChatEntry.GrabFocus();
+			GetViewport().SetInputAsHandled();
+		}
+		if (@event.IsActionPressed("ui_cancel") && _ChatEntry.HasFocus()) {
+			_ChatEntry.ReleaseFocus();
+			GetViewport().SetInputAsHandled();
+    	}
+    }
     public override void _ExitTree() {
         ServerManager.ChatMessageSent -= AddMessage;
     }
@@ -32,12 +45,19 @@ public partial class ChatMenu : Control {
 
 	}
 	public void OnSubmitButtonPressed() {
-		String message = _ChatEntry.Text;
-		_ChatEntry.Text = "";
-		ServerManager.Instance.RpcId(1, nameof(ServerManager.Instance.RpcSendChatMessage), message);
-		
+		if (_ChatEntry.Text == "") return;
+		CreateMessage(_ChatEntry.Text);
 	}
 
+	public void OnChatEntrySubmitted(string newMessage) {
+		if (newMessage == "") return;
+		CreateMessage(newMessage);
+	}
+	
+	private void CreateMessage(string newMessage) {
+		_ChatEntry.Text = "";
+		ServerManager.Instance.RpcId(1, nameof(ServerManager.Instance.RpcSendChatMessage), newMessage);
+	}
 
 
 }
