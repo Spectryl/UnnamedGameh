@@ -4,8 +4,9 @@ using System;
 public partial class GameManager : Node {
 	public static GameManager Instance {get; private set;}
 	public static PersistentFileManager PersistentFileManager {get; private set;}
-	public static OptionsScreenManager OptionsScreenManager  {get; private set;}
+	public static OptionsScreenManager OptionsScreenManager   {get; private set;}
 	public static ServerManager        ServerManager          {get; private set;}
+	public static ReadyManager         ReadyManager           {get; private set;}
 	public static Camera3D Camera;
 	public static event Action StateChanged;
 	public static bool IsOptionsScreenOpen;
@@ -47,6 +48,7 @@ public partial class GameManager : Node {
 		GetViewport().UseHdr2D = true;
 		SetupPersisentFileManager();
 		SetupServerManager();
+		SetupReadyManager();
 		CurrentState = GameState.MAIN_MENU;
 		OptionScreenToggled += ToggleOptionsScreen;
 	}
@@ -84,7 +86,11 @@ public partial class GameManager : Node {
 	private void SetupPersisentFileManager() => PersistentFileManager = new PersistentFileManager();
 	private void SetupServerManager() {
 		ServerManager = new ServerManager();
-		AddChild(ServerManager);
+		AddChild(ServerManager, true);
+	}
+	private void SetupReadyManager() {
+		ReadyManager = new ReadyManager();
+		AddChild(ReadyManager, true);
 	}
 	
 }

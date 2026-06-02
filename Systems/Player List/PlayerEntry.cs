@@ -3,7 +3,7 @@ using System;
 [GlobalClass]
 public partial class PlayerEntry : RichTextLabel {
     public int Id;
-    public void Setup(int id, String username) {
+    public void Setup(int id, string username) {
         Id = id;
         Text = $" {username}";
 		FitContent = true;

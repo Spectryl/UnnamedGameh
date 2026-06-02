@@ -2,7 +2,7 @@ using Godot;
 using System;
 [GlobalClass]
 public partial class ChatMessage : RichTextLabel {
-	public void Setup(String sender, String message) {
+	public void Setup(string sender, String message) {
 		Text = $" {sender}: {message}";
 		FitContent = true;
 		ScrollActive = false;

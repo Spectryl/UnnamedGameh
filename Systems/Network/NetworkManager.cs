@@ -14,6 +14,7 @@ public static class NetworkManager {
 		CHAT,
 	}
 	public static void CreateServer() {
+		EnetPeer = new ENetMultiplayerPeer();
 		Error error = EnetPeer.CreateServer(NetworkManager.PORT);
 		GD.Print("Creating Enet Host");
 		if (error != Error.Ok) {
@@ -26,6 +27,7 @@ public static class NetworkManager {
 	}
 
 	public static void JoinServer() {
+		EnetPeer = new ENetMultiplayerPeer();
 		Error error = EnetPeer.CreateClient(NetworkManager.IP_ADDRESS, NetworkManager.PORT);
 		GD.Print("Creating Enet Client");
 		if (error != Error.Ok) {

@@ -9,6 +9,10 @@ public partial class PlayerList : Control {
 		ServerManager.PlayerListUpdated += RefreshList;
 		RefreshList();
 	}
+
+    public override void _ExitTree() {
+        ServerManager.PlayerListUpdated -= RefreshList;
+    }
     public override void _PhysicsProcess(double delta) {
         base._PhysicsProcess(delta);
 		//RefreshList();

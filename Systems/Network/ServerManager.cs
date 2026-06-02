@@ -6,7 +6,7 @@ public partial class ServerManager : Node {
     public static ServerManager Instance { get; private set; }
 	public static PlayerData[] PlayerDataList = new PlayerData[NetworkManager.MaxPlayerCount];
 	public static string Username = GD.RandRange(0,1000).ToString();
-	public static Action<String, String> ChatMessageSent;
+	public static Action<string, string> ChatMessageSent;
 	public static Action PlayerListUpdated;
 
     public override void _Ready() {
@@ -22,17 +22,22 @@ public partial class ServerManager : Node {
 		AddPlayerToList(1, Username);
 		PlayerListUpdated?.Invoke();
 	}
+	
 	public void CloseServer() {
 		if (!IsHost()) return;
 		Rpc(nameof(RpcCloseServer));
 		ResetServerState();
 	}
+
 	public void LeaveServer() {
+		GD.Print("Leaving Server");
 		ResetServerState();
 	}
+
 	public bool IsHost() {
 		return GameManager.Instance.Multiplayer.GetUniqueId() == 1;
 	}
+
 	public static string GetUsernameById(int id) {
 		for (int i = 0; i < NetworkManager.CurrentPlayerCount; i++) {
 			if (PlayerDataList[i].Id == id) return PlayerDataList[i].Username;
@@ -48,6 +53,7 @@ public partial class ServerManager : Node {
 		NetworkManager.CurrentPlayerCount = 0;
 		Array.Clear(PlayerDataList, 0, PlayerDataList.Length);
 	}
+
 	private void OnPeerDisconnected(long id) {
 		if (!IsHost()) return;
 		for (int i = 0; i < NetworkManager.CurrentPlayerCount; i++){
@@ -61,13 +67,14 @@ public partial class ServerManager : Node {
 		}
 		BroadcastPlayerList();
 	}
+
 	private void OnPeerConnectedToServer() {
 		GD.Print("Peer has connected to server");
 		RpcId(1, nameof(RpcRegisterPlayer), Username);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
-	private void RpcRegisterPlayer(String username) {
+	private void RpcRegisterPlayer(string username) {
 		if (!IsHost()) return;
 		int senderId = GameManager.Instance.Multiplayer.GetRemoteSenderId();
 		GD.Print($"Adding Player {senderId}: {username}");
@@ -77,6 +84,7 @@ public partial class ServerManager : Node {
 	private void AddPlayerToList(int id, string username) {
 		PlayerDataList[NetworkManager.CurrentPlayerCount++] = new PlayerData((int)id, username);
 	}
+
 	private void BroadcastPlayerList() {
 		GD.Print("Receiving Player List");
 		int[] ids = new int[NetworkManager.CurrentPlayerCount];
@@ -109,6 +117,7 @@ public partial class ServerManager : Node {
 		string senderName = GetUsernameById(senderId);
 		Rpc(nameof(RpcReceiveChatMessage), senderName, message);
 	}
+
 	[Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = (int)NetworkManager.ChannelEnum.CHAT)]
 	private void RpcReceiveChatMessage(string sender, string message) {
 		ChatMessageSent?.Invoke(sender, message);

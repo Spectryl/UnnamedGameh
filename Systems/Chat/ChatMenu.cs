@@ -28,6 +28,7 @@ public partial class ChatMenu : Control {
 			GetViewport().SetInputAsHandled();
     	}
     }
+
     public override void _ExitTree() {
         ServerManager.ChatMessageSent -= AddMessage;
     }
@@ -44,6 +45,7 @@ public partial class ChatMenu : Control {
 		}
 
 	}
+	
 	public void OnSubmitButtonPressed() {
 		if (_ChatEntry.Text == "") return;
 		CreateMessage(_ChatEntry.Text);

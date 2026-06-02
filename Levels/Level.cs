@@ -2,6 +2,9 @@ using Godot;
 using System;
 
 public partial class Level : Node {
+    public override void _Ready() {
+        ReadyManager.LevelLoaded?.Invoke();
+    }
 	private void CreatePlayer(int id) {
 		Player newPlayer = (Player) GD.Load<PackedScene>(UIDS.Player).Instantiate();
 		newPlayer.Name = id.ToString();
