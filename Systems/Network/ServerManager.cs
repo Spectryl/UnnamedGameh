@@ -1,11 +1,10 @@
 using Godot;
 using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
 public partial class ServerManager : Node {
     public static ServerManager Instance { get; private set; }
 	public static PlayerData[] PlayerDataList = new PlayerData[NetworkManager.MaxPlayerCount];
 	public static string Username = GD.RandRange(0,1000).ToString();
+
 	public static Action<string, string> ChatMessageSent;
 	public static Action PlayerListUpdated;
 
@@ -15,26 +14,7 @@ public partial class ServerManager : Node {
         GameManager.Instance.Multiplayer.PeerDisconnected += OnPeerDisconnected;
 		GameManager.Instance.Multiplayer.ConnectedToServer += OnPeerConnectedToServer;
     }
-
-	public void CreateServer() {
-		NetworkManager.CreateServer();
-		NetworkManager.CurrentPlayerCount = 0;
-		AddPlayerToList(1, Username);
-		PlayerListUpdated?.Invoke();
-	}
-	
-	public void CloseServer() {
-		if (!IsHost()) return;
-		Rpc(nameof(RpcCloseServer));
-		ResetServerState();
-	}
-
-	public void LeaveServer() {
-		GD.Print("Leaving Server");
-		ResetServerState();
-	}
-
-	public bool IsHost() {
+	public static bool IsHost() {
 		return GameManager.Instance.Multiplayer.GetUniqueId() == 1;
 	}
 
@@ -45,16 +25,41 @@ public partial class ServerManager : Node {
 		return "Unknown";
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
-	private void RpcCloseServer() => ResetServerState();
+	public void CreateServer() {
+		NetworkManager.CreateServer();
+		NetworkManager.CurrentPlayerCount = 0;
+		AddPlayerToList(1, Username);
+		PlayerListUpdated?.Invoke();
+	}
 
-	private void ResetServerState() {
-		GameManager.Instance.Multiplayer.MultiplayerPeer.Close();
-		GameManager.Instance.Multiplayer.MultiplayerPeer = null;
+	public void LeaveServer() { GD.Print("Leaving Server"); Cleanup();}
+	public void CloseServer() {
+		if (!IsHost()) return;
+		Rpc(nameof(RpcCloseServer));
+		Cleanup();
+	}
+	public static void KickPlayer(int id) {
+		if (!IsHost()) return;
+		GD.Print($"Kicking Player: {id}");
+		GameManager.Instance.Multiplayer.MultiplayerPeer.DisconnectPeer(id, force:true);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
+	private void RpcCloseServer() => Cleanup();
+
+	private void Cleanup() {
+		if (GameManager.Instance.Multiplayer.MultiplayerPeer != null) {
+			GameManager.Instance.Multiplayer.MultiplayerPeer.Close();
+			GameManager.Instance.Multiplayer.MultiplayerPeer = null;
+		}
 		NetworkManager.CurrentPlayerCount = 0;
 		Array.Clear(PlayerDataList, 0, PlayerDataList.Length);
 	}
 
+	private void OnPeerConnectedToServer() {
+		GD.Print("Peer has connected to server");
+		RpcId(1, nameof(RpcRegisterPlayer), Username);
+	}
 	private void OnPeerDisconnected(long id) {
 		if (!IsHost()) return;
 		for (int i = 0; i < NetworkManager.CurrentPlayerCount; i++){
@@ -63,16 +68,13 @@ public partial class ServerManager : Node {
 					PlayerDataList[j] = PlayerDataList[j+1];
 				}
 				PlayerDataList[--NetworkManager.CurrentPlayerCount] = null;
+				if (ReadyManager.PlayersLoaded.Contains((int)id)) ReadyManager.PlayersLoaded.Remove((int)id);
 				break;
 			}
 		}
 		BroadcastPlayerList();
 	}
 
-	private void OnPeerConnectedToServer() {
-		GD.Print("Peer has connected to server");
-		RpcId(1, nameof(RpcRegisterPlayer), Username);
-	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
 	private void RpcRegisterPlayer(string username) {

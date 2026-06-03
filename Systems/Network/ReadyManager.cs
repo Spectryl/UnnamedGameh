@@ -4,21 +4,25 @@ using System.Collections.Generic;
 
 public partial class ReadyManager : Node {
     public static ReadyManager Instance { get; private set; }
-    private List<int> _playersLoaded = new List<int>();
-
+    public static List<int> PlayersLoaded = new List<int>();
     public static Action LevelLoaded;
-
+    private Timer _KickTimer;
+    private int KICK_TIME = 60;
     public override void _Ready() {
         Instance = this;
         LevelLoaded += OnLevelReady;
-    }
+        _KickTimer = new Timer();
+        _KickTimer.WaitTime = KICK_TIME;
+        _KickTimer.OneShot = true;
+        _KickTimer.Timeout += OnKickTimerTimeout;
+        _KickTimer.Start();
 
-    private void OnLevelReady() {
-        RpcId(1, nameof(RpcPlayerLoaded));
     }
 
     public void StartLoadingGame() {
-        if (!ServerManager.Instance.IsHost()) return;
+        if (!ServerManager.IsHost()) return;
+        PlayersLoaded.Clear();
+        _KickTimer.Start();
         Rpc(nameof(RpcLoadGame));
     }
 
@@ -27,14 +31,18 @@ public partial class ReadyManager : Node {
         GameManager.Instance.CurrentState = GameManager.GameState.GAME;
     }
 
+    private void OnLevelReady() {
+        RpcId(1, nameof(RpcPlayerLoaded));
+    }
+
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
     private void RpcPlayerLoaded() {
 		int id = GameManager.Instance.Multiplayer.GetRemoteSenderId();
-        if (!ServerManager.Instance.IsHost()) return;
-        if (!_playersLoaded.Contains(id)) _playersLoaded.Add(id);
-        GD.Print($"Players loaded: {_playersLoaded.Count}/{NetworkManager.CurrentPlayerCount}");
-        if (_playersLoaded.Count >= NetworkManager.CurrentPlayerCount) {
-            _playersLoaded.Clear();
+        if (!ServerManager.IsHost()) return;
+        if (!PlayersLoaded.Contains(id)) PlayersLoaded.Add(id);
+        GD.Print($"Players loaded: {PlayersLoaded.Count}/{NetworkManager.CurrentPlayerCount}");
+        if (PlayersLoaded.Count >= NetworkManager.CurrentPlayerCount) {
+            PlayersLoaded.Clear();
             Rpc(nameof(RpcStartGame));
         }
     }
@@ -42,5 +50,19 @@ public partial class ReadyManager : Node {
     [Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
     private void RpcStartGame() {
         GD.Print("All players loaded, starting game!");
+        PlayersLoaded.Clear();
+    }
+
+    private void OnKickTimerTimeout() {
+        List<int> kickList = new List<int>();
+        foreach(PlayerData playerData in ServerManager.PlayerDataList) {
+            int id = playerData.Id;
+            if(!PlayersLoaded.Contains(id)) kickList.Add(id);
+        }
+
+        foreach(int id in kickList) {
+            PlayersLoaded.Remove(id);
+            ServerManager.KickPlayer(id);
+        }
     }
 }

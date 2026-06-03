@@ -26,7 +26,7 @@ public partial class Lobby : MainMenuSubMenu {
 	}
 
 	private void UpdateStartButton() {
-		_StartButton.Disabled = !ServerManager.Instance.IsHost();
+		_StartButton.Disabled = !ServerManager.IsHost();
 	}	
 
 	private void OnStartButtonPressed() {
@@ -34,7 +34,7 @@ public partial class Lobby : MainMenuSubMenu {
 	}
 
 	private void OnLeaveButtonPressed() {
-		if (ServerManager.Instance.IsHost()) {
+		if (ServerManager.IsHost()) {
 			ServerManager.Instance.CloseServer();
 		} else {
 			ServerManager.Instance.LeaveServer();
