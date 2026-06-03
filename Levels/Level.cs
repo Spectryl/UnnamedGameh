@@ -3,8 +3,16 @@ using System;
 
 public partial class Level : Node {
     public override void _Ready() {
+		ServerManager.GameStarted += CreateAllPlayers;
         ReadyManager.LevelLoaded?.Invoke();
+		
     }
+
+	private void CreateAllPlayers() {
+		foreach(PlayerData playerData in GameManager.PlayerDataList) {
+			CreatePlayer(playerData.Id);
+		}
+	}
 	private void CreatePlayer(int id) {
 		Player newPlayer = (Player) GD.Load<PackedScene>(UIDS.Player).Instantiate();
 		newPlayer.Name = id.ToString();

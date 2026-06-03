@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class GameManager : Node {
 	public static GameManager Instance {get; private set;}
@@ -12,6 +13,8 @@ public partial class GameManager : Node {
 	public static event Action StateChanged;
 	public static bool IsOptionsScreenOpen;
     public static Action OptionScreenToggled;
+	public static List<Player> PlayerList;
+	public static List<PlayerData> PlayerDataList;
 	public enum GameState {
 		MAIN_MENU,
 		GAME,
@@ -46,6 +49,8 @@ public partial class GameManager : Node {
 		Instance = this;
 		Camera = GetNode<Camera3D>("Camera");
 		_OptionsMenuLayer = GetNode<CanvasLayer>("OptionsMenuCanvasLayer");
+		PlayerList = new List<Player>();
+		PlayerDataList = new List<PlayerData>();
 		GetViewport().UseHdr2D = true;
 		SetupPersisentFileManager();
 		SetupServerManager();
@@ -53,6 +58,7 @@ public partial class GameManager : Node {
 		SetupSyncManager();
 		CurrentState = GameState.MAIN_MENU;
 		OptionScreenToggled += ToggleOptionsScreen;
+
 	}
     public override void _UnhandledInput(InputEvent @event) {
         if (Input.IsActionJustPressed("Pause")) ToggleOptionsScreen();

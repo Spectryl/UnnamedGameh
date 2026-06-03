@@ -15,8 +15,8 @@ public partial class ReadyManager : Node {
         _KickTimer.WaitTime = KICK_TIME;
         _KickTimer.OneShot = true;
         _KickTimer.Timeout += OnKickTimerTimeout;
-        _KickTimer.Start();
-
+        AddChild(_KickTimer);
+        
     }
 
     public void StartLoadingGame() {
@@ -51,11 +51,14 @@ public partial class ReadyManager : Node {
     private void RpcStartGame() {
         GD.Print("All players loaded, starting game!");
         PlayersLoaded.Clear();
+        _KickTimer.Stop();
+        ServerManager.GameStarted?.Invoke();
+
     }
 
     private void OnKickTimerTimeout() {
         List<int> kickList = new List<int>();
-        foreach(PlayerData playerData in ServerManager.PlayerDataList) {
+        foreach(PlayerData playerData in GameManager.PlayerDataList) {
             int id = playerData.Id;
             if(!PlayersLoaded.Contains(id)) kickList.Add(id);
         }

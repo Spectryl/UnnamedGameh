@@ -2,11 +2,12 @@ using Godot;
 using System;
 public partial class ServerManager : Node {
     public static ServerManager Instance { get; private set; }
-	public static PlayerData[] PlayerDataList = new PlayerData[NetworkManager.MaxPlayerCount];
+	
 	public static string Username = GD.RandRange(0,1000).ToString();
 
 	public static Action<string, string> ChatMessageSent;
 	public static Action PlayerListUpdated;
+	public static Action GameStarted;
 
     public override void _Ready() {
         Instance = this;
@@ -19,9 +20,7 @@ public partial class ServerManager : Node {
 	}
 
 	public static string GetUsernameById(int id) {
-		for (int i = 0; i < NetworkManager.CurrentPlayerCount; i++) {
-			if (PlayerDataList[i].Id == id) return PlayerDataList[i].Username;
-		}
+		foreach(PlayerData playerData in GameManager.PlayerDataList) if (playerData.Id == id) return playerData.Username;
 		return "Unknown";
 	}
 
@@ -53,7 +52,7 @@ public partial class ServerManager : Node {
 			GameManager.Instance.Multiplayer.MultiplayerPeer = null;
 		}
 		NetworkManager.CurrentPlayerCount = 0;
-		Array.Clear(PlayerDataList, 0, PlayerDataList.Length);
+		GameManager.PlayerDataList.Clear();
 	}
 
 	private void OnPeerConnectedToServer() {
@@ -62,16 +61,9 @@ public partial class ServerManager : Node {
 	}
 	private void OnPeerDisconnected(long id) {
 		if (!IsHost()) return;
-		for (int i = 0; i < NetworkManager.CurrentPlayerCount; i++){
-			if (PlayerDataList[i].Id == id) {
-				for (int j = i; j < NetworkManager.CurrentPlayerCount - 1; j++) {
-					PlayerDataList[j] = PlayerDataList[j+1];
-				}
-				PlayerDataList[--NetworkManager.CurrentPlayerCount] = null;
-				if (ReadyManager.PlayersLoaded.Contains((int)id)) ReadyManager.PlayersLoaded.Remove((int)id);
-				break;
-			}
-		}
+		GameManager.PlayerDataList.RemoveAll(p => p.Id == (int)id);
+        NetworkManager.CurrentPlayerCount = GameManager.PlayerDataList.Count;
+        ReadyManager.PlayersLoaded.Remove((int)id);
 		BroadcastPlayerList();
 	}
 
@@ -85,7 +77,8 @@ public partial class ServerManager : Node {
 		BroadcastPlayerList();
 	}
 	private void AddPlayerToList(int id, string username) {
-		PlayerDataList[NetworkManager.CurrentPlayerCount++] = new PlayerData((int)id, username);
+		GameManager.PlayerDataList.Add(new PlayerData(id, username));
+		NetworkManager.CurrentPlayerCount++;
 	}
 
 	private void BroadcastPlayerList() {
@@ -94,8 +87,8 @@ public partial class ServerManager : Node {
 		string[] usernames = new string[NetworkManager.CurrentPlayerCount];
 
 		for (int i = 0; i < NetworkManager.CurrentPlayerCount; i++) {
-			ids[i] = PlayerDataList[i].Id;
-			usernames[i] = PlayerDataList[i].Username;
+			ids[i] = GameManager.PlayerDataList[i].Id;
+			usernames[i] = GameManager.PlayerDataList[i].Username;
 		}
 		Rpc(nameof(RpcSyncPlayerList), ids, usernames);
 		PlayerListUpdated?.Invoke();
@@ -105,7 +98,7 @@ public partial class ServerManager : Node {
     private void RpcSyncPlayerList(int[] ids, string[] usernames) {
         GD.Print("Syncing player list, count: ", ids.Length);
         NetworkManager.CurrentPlayerCount = 0;
-		Array.Clear(PlayerDataList, 0, PlayerDataList.Length);
+		GameManager.PlayerDataList.Clear();
         for (int i = 0; i < ids.Length; i++) {
 			AddPlayerToList(ids[i],usernames[i]);
         }

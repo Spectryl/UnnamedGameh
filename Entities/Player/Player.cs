@@ -9,6 +9,7 @@ public partial class Player : CharacterBody3D {
 	private Camera3D _Camera;
 
     public override void _Ready() {
+		GameManager.PlayerList.Add(this);
 		_Mesh = GetNode<MeshInstance3D>("MeshInstance3D");
 		_CollisionShape = GetNode<CollisionShape3D>("CollisionShape3D");
 		_Camera = GetNode<Camera3D>("Camera3D");
@@ -24,6 +25,7 @@ public partial class Player : CharacterBody3D {
 	}
 
 	public override void _PhysicsProcess(double delta) {
+		if (!IsMultiplayerAuthority()) return;
 		Vector3 velocity = Velocity;
 
 		// Add the gravity.
