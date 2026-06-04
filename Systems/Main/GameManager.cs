@@ -8,15 +8,20 @@ public partial class GameManager : Node {
 	public static OptionsScreenManager OptionsScreenManager   {get; private set;}
 	public static ServerManager        ServerManager          {get; private set;}
 	public static ReadyManager         ReadyManager           {get; private set;}
-	public static PlayerSyncManager          SyncManager            {get; private set;}
+	public static PlayerSyncManager    SyncManager            {get; private set;}
 	public static Camera3D Camera;
 	public static event Action StateChanged;
 	public static bool IsOptionsScreenOpen;
     public static Action OptionScreenToggled;
 	public static List<Player> PlayerList;
 	public static List<PlayerData> PlayerDataList;
+	public static string Username {
+		get {return _Username;}
+		set {_Username = value;}
+	}
 	public enum GameState {
 		MAIN_MENU,
+		LOBBY,
 		GAME,
 	}
 
@@ -27,6 +32,7 @@ public partial class GameManager : Node {
 			_CurrentScene?.QueueFree();
 			_CurrentScene = value switch {
 				GameState.MAIN_MENU => GD.Load<PackedScene>(UIDS.MainMenu).Instantiate(),
+				GameState.LOBBY     => GD.Load<PackedScene>(UIDS.Lobby).Instantiate(),
 				GameState.GAME      => GD.Load<PackedScene>(UIDS.Game).Instantiate()
 			};
 			AddChild(_CurrentScene);
@@ -34,6 +40,7 @@ public partial class GameManager : Node {
 		}
 	}
 
+	private static string _Username;
 	private CanvasLayer _OptionsMenuLayer;
 	private Node _CurrentScene;
 	private GameState _CurrentState;
@@ -51,6 +58,7 @@ public partial class GameManager : Node {
 		_OptionsMenuLayer = GetNode<CanvasLayer>("OptionsMenuCanvasLayer");
 		PlayerList = new List<Player>();
 		PlayerDataList = new List<PlayerData>();
+		Username = GD.RandRange(0,1000).ToString();
 		GetViewport().UseHdr2D = true;
 		SetupPersisentFileManager();
 		SetupServerManager();

@@ -28,7 +28,7 @@ public partial class TitleScreen : MainMenuSubMenu {
 
 	private void Play() => MainMenu.CurrentState = MainMenu.SubMenu.JOIN; 
 	private void Options() => GameManager.OptionScreenToggled.Invoke();
-	private void Credits() {}
+	private void Credits() => MainMenu.CurrentState = MainMenu.SubMenu.CREDITS;
 	private void Quit() => GetTree().Quit();
 
 	private void SetupVersionText() => _VersionLabel.Text = $"{ProjectSettings.GetSetting("application/config/version")}";

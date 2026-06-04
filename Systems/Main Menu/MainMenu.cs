@@ -5,7 +5,6 @@ public partial class MainMenu : Node3D {
 	public enum SubMenu {
 		TITLE_SCREEN,
 		JOIN,
-		LOBBY,
 		OPTIONS,
 		CREDITS,
 		EXTRAS
@@ -17,7 +16,7 @@ public partial class MainMenu : Node3D {
 			_CurrentMenu = value switch {
 				SubMenu.TITLE_SCREEN => (MainMenuSubMenu) GD.Load<PackedScene>(UIDS.TitleScreen).Instantiate(),
 				SubMenu.JOIN         => (MainMenuSubMenu) GD.Load<PackedScene>(UIDS.JoinMenu).Instantiate(),
-				SubMenu.LOBBY        => (MainMenuSubMenu) GD.Load<PackedScene>(UIDS.Lobby).Instantiate(),
+				SubMenu.CREDITS      => (MainMenuSubMenu) GD.Load<PackedScene>(UIDS.CreditsMenu).Instantiate(),
 			};
 			_CurrentMenu.MainMenu = this;
 			_MainMenuCanvasLayer.AddChild(_CurrentMenu);

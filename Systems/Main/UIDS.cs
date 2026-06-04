@@ -10,7 +10,7 @@ public static partial class UIDS {
     public static string TitleScreen        = "uid://cshj62srbydfl";
     public static string JoinMenu           = "uid://dt33l8luvib0b";
     public static string Lobby              = "uid://rvaaapdgcyf";
-
+    public static String CreditsMenu        = "uid://bdeurloxuhcnj";
 
     public static string OptionsScreen      = "uid://c0ovlvxu3ufyq";
     // Options Screen Submenus

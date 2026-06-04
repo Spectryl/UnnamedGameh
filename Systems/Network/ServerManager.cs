@@ -2,9 +2,6 @@ using Godot;
 using System;
 public partial class ServerManager : Node {
     public static ServerManager Instance { get; private set; }
-	
-	public static string Username = GD.RandRange(0,1000).ToString();
-
 	public static Action<string, string> ChatMessageSent;
 	public static Action PlayerListUpdated;
 	public static Action GameStarted;
@@ -27,7 +24,7 @@ public partial class ServerManager : Node {
 	public void CreateServer() {
 		NetworkManager.CreateServer();
 		NetworkManager.CurrentPlayerCount = 0;
-		AddPlayerToList(1, Username);
+		AddPlayerToList(1, GameManager.Username);
 		PlayerListUpdated?.Invoke();
 	}
 
@@ -57,7 +54,7 @@ public partial class ServerManager : Node {
 
 	private void OnPeerConnectedToServer() {
 		GD.Print("Peer has connected to server");
-		RpcId(1, nameof(RpcRegisterPlayer), Username);
+		RpcId(1, nameof(RpcRegisterPlayer), GameManager.Username);
 	}
 	private void OnPeerDisconnected(long id) {
 		if (!IsHost()) return;

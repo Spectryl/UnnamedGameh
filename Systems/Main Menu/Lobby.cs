@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Lobby : MainMenuSubMenu {
+public partial class Lobby : Control {
 	private Label _PlayerCount;
 	private Button _StartButton;
 	private Button _LeaveButton;

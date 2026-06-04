@@ -21,15 +21,13 @@ public partial class JoinMenu : MainMenuSubMenu {
 	}
 
 	public void OnHostButtonPressed() {
-		//GameManager.Instance.CurrentState = GameManager.GameState.GAME;
-		MainMenu.CurrentState = MainMenu.SubMenu.LOBBY;
+		GameManager.Instance.CurrentState = GameManager.GameState.LOBBY;
 		ServerManager.Instance.CreateServer();
 		
 	}
 	
 	public void OnJoinButtonPressed() {
-		//GameManager.Instance.CurrentState = GameManager.GameState.GAME;
-		MainMenu.CurrentState = MainMenu.SubMenu.LOBBY;
+		GameManager.Instance.CurrentState = GameManager.GameState.LOBBY;
 		NetworkManager.JoinServer();
 	}
 	public void OnBackButtonPressed() => MainMenu.CurrentState = MainMenu.SubMenu.TITLE_SCREEN;

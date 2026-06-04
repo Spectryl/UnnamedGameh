@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://bdeurloxuhcnj"]
+
+[ext_resource type="Script" uid="uid://bs1gl5l0ca0ti" path="res://Systems/Credits Menu/CreditsMenu.cs" id="1_p1ixc"]
+
+[node name="CreditsMenu" type="Control" unique_id=783909126]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p1ixc")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=370472378]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 671.0
+offset_right = 53.0
+offset_bottom = 711.0
+
+[node name="BackButton" type="Button" parent="MarginContainer" unique_id=1472261290]
+layout_mode = 2
+text = "Back"
+
+[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=441857721]
+layout_mode = 0
+offset_left = 365.0
+offset_top = 87.0
+offset_right = 845.0
+offset_bottom = 412.0
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer2" unique_id=1145829884]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer2/PanelContainer" unique_id=542577676]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/PanelContainer/ScrollContainer" unique_id=2050612908]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=170241607]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label2" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=552014266]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label3" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=1742064779]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label4" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=527802777]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label5" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=1043112308]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label6" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=661457262]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label7" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=154138890]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label8" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=456115547]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label9" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=1126670889]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label10" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=718887809]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label11" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=383953978]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label12" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=1589231347]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label13" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=44957641]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label14" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=2044080027]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label15" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=1075395906]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label16" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=323955233]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label17" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=1296452930]
+layout_mode = 2
+text = "Credits"
+
+[node name="Label18" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=1532148529]
+layout_mode = 2
+text = "Credits"

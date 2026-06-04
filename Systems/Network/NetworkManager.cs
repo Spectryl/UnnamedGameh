@@ -6,7 +6,7 @@ public static class NetworkManager {
 	public static int Port = 6767;
 	public static int CurrentPlayerCount = 0;
 	public static int MaxPlayerCount = 4;
-	public static ENetMultiplayerPeer EnetPeer = new ENetMultiplayerPeer();
+	public static ENetMultiplayerPeer EnetPeer;
 	public enum ChannelEnum {DEFAULT = 0,CHAT,}
 	public static void CreateServer() {
 		EnetPeer = new ENetMultiplayerPeer();
