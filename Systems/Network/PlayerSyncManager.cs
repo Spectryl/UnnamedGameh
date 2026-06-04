@@ -1,20 +1,56 @@
 using Godot;
 using System;
 
-public partial class SyncManager : Node {
-    public static SyncManager Instance {get; private set;}
-	public float[] ThingsToSync;
-	private static int _TickRate = (int) ProjectSettings.GetSetting("physics/common/physics_ticks_per_second");
+public partial class PlayerSyncManager : Node {
+    public static PlayerSyncManager Instance { get; private set; }
+    private static int _TickRate = (int)ProjectSettings.GetSetting("physics/common/physics_ticks_per_second");
     private int _Tick = 0;
+    private int SyncInterval = 1;
+    private string _LocalId => GameManager.Instance.Multiplayer.GetUniqueId().ToString();
 
     public override void _Ready() {
         Instance = this;
     }
-    public override void _PhysicsProcess(double delta) {
 
+    public override void _PhysicsProcess(double delta) {
+        _Tick++;
+        if (_Tick < SyncInterval) return;
+        _Tick = 0;
+        SyncLocalPlayer();
     }
 
-    private void SyncPlayers() {
-        
+    private void SyncLocalPlayer() {
+        Player localPlayer = GameManager.PlayerList.Find(p => p.Name == _LocalId);
+        if (localPlayer == null) return;
+        int offset = 0;
+        byte[] data = new byte[24];
+        float xPosition = localPlayer.GlobalPosition.X;
+        float yPosition = localPlayer.GlobalPosition.Y;
+        float zPosition = localPlayer.GlobalPosition.Z;
+        float xRotation = localPlayer.GlobalRotation.X;
+        float yRotation = localPlayer.GlobalRotation.Y;
+        float zRotation = localPlayer.GlobalRotation.Z;
+        Buffer.BlockCopy(BitConverter.GetBytes(xPosition), 0, data, offset,      4);
+        Buffer.BlockCopy(BitConverter.GetBytes(yPosition), 0, data, offset + 4,  4);
+        Buffer.BlockCopy(BitConverter.GetBytes(zPosition), 0, data, offset + 8,  4);
+        Buffer.BlockCopy(BitConverter.GetBytes(xRotation), 0, data, offset + 12, 4);
+        Buffer.BlockCopy(BitConverter.GetBytes(yRotation), 0, data, offset + 16, 4);
+        Buffer.BlockCopy(BitConverter.GetBytes(zRotation), 0, data, offset + 20, 4);
+        Rpc(nameof(RpcSyncPlayer), _LocalId, data);
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Unreliable, TransferChannel = 0)]
+    private void RpcSyncPlayer(string id, byte[] data) {
+        if (id == _LocalId) return;
+        Player player = GameManager.PlayerList.Find(p => p.Name == id);
+        if (player == null) return;
+        float xPosition = BitConverter.ToSingle(data, 0);
+        float yPosition = BitConverter.ToSingle(data, 4);
+        float zPosition = BitConverter.ToSingle(data, 8);
+        float xRotation = BitConverter.ToSingle(data, 12);
+        float yRotation = BitConverter.ToSingle(data, 16);
+        float zRotation = BitConverter.ToSingle(data, 20);
+        player.GlobalPosition = player.GlobalPosition.Lerp(new Vector3(xPosition, yPosition, zPosition), 0.3f);
+        player.GlobalRotation = player.GlobalRotation.Lerp(new Vector3(xRotation, yRotation, zRotation), 0.3f);
     }
 }

@@ -8,7 +8,7 @@ public partial class GameManager : Node {
 	public static OptionsScreenManager OptionsScreenManager   {get; private set;}
 	public static ServerManager        ServerManager          {get; private set;}
 	public static ReadyManager         ReadyManager           {get; private set;}
-	public static SyncManager          SyncManager            {get; private set;}
+	public static PlayerSyncManager          SyncManager            {get; private set;}
 	public static Camera3D Camera;
 	public static event Action StateChanged;
 	public static bool IsOptionsScreenOpen;
@@ -101,7 +101,7 @@ public partial class GameManager : Node {
 		AddChild(ReadyManager, true);
 	}
 	private void SetupSyncManager() {
-		SyncManager = new SyncManager();
+		SyncManager = new PlayerSyncManager();
 		AddChild(SyncManager, true);
 	}
 	
