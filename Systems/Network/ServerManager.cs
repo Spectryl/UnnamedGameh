@@ -11,6 +11,7 @@ public partial class ServerManager : Node {
         //GameManager.Instance.Multiplayer.PeerConnected += OnPeerConnected;
         GameManager.Instance.Multiplayer.PeerDisconnected += OnPeerDisconnected;
 		GameManager.Instance.Multiplayer.ConnectedToServer += OnPeerConnectedToServer;
+		GameManager.Instance.Multiplayer.ServerDisconnected += OnServerDisconnected;
     }
 	public static bool IsHost() {
 		return GameManager.Instance.Multiplayer.GetUniqueId() == 1;
@@ -38,6 +39,12 @@ public partial class ServerManager : Node {
 		if (!IsHost()) return;
 		GD.Print($"Kicking Player: {id}");
 		GameManager.Instance.Multiplayer.MultiplayerPeer.DisconnectPeer(id, force:true);
+	}
+
+	private void OnServerDisconnected() {
+		GD.Print("Server Disconnected");
+		LeaveServer();
+		GameManager.Instance.CurrentState = GameManager.GameState.MAIN_MENU;
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.Authority, CallLocal = false, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
