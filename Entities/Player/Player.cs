@@ -7,13 +7,6 @@ public partial class Player : CharacterBody3D {
 		set {_Speed = value;}
 	}
 	private float _Speed;
-
-	public float SprintModifier {
-		get {return _SprintModifier;}
-		set {_SprintModifier = value;}
-	}
-	private float _SprintModifier;
-
 	public float Acceleration {
 		get {return _Acceleration;}
 		set {_Acceleration = value;}
@@ -27,12 +20,19 @@ public partial class Player : CharacterBody3D {
 	private float _JumpPower;
 
 	public HealthComponent Health = new HealthComponent(100);
+	public PlayerSprintComponent Sprint = new PlayerSprintComponent();
 
 	private float MouseSensitivity = 0.005f; //TODO: Add this to options menu
 	private float Friction { // TODO: Should be based on ground so later ig
 		get {return _Acceleration;}
 		set {;}
 	}
+
+	private float _JumpBufferTime = 0.15f;
+	private float _JumpBufferTimer = 0.00f;
+	private float _CoyoteTime = 0.15f;
+	private float _CoyoteTimer = 0.00f;
+	private bool _WasOnFloor = false;
 
 	private Camera3D _Camera;
 	private MeshInstance3D _Mesh;
@@ -59,7 +59,7 @@ public partial class Player : CharacterBody3D {
 		}
 
 		Speed = 10.0f;
-		SprintModifier = 2.5f;
+		Sprint.SprintModifier = 2.5f;
 		JumpPower = 6f;
 		Acceleration = 10f;
 	}
@@ -71,7 +71,7 @@ public partial class Player : CharacterBody3D {
 		if (!IsMultiplayerAuthority()) return;
 		HandleGravity(delta);
 		HandleMovement(delta);
-		HandleJump();
+		HandleJump(delta);
 		MoveAndSlide();
 	}
 
@@ -83,7 +83,7 @@ public partial class Player : CharacterBody3D {
 		Vector2 inputDirection = Input.GetVector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward");
 		Vector3 direction = (Transform.Basis * new Vector3(inputDirection.X, 0, inputDirection.Y)).Normalized();
 		Vector3 velocity = this.Velocity;
-		float speed = Input.IsActionPressed("Sprint") ? Speed * SprintModifier : this.Speed;
+		float speed = Sprint.GetSpeed(Speed);
 		
 		if (direction != Vector3.Zero) {
             velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, Acceleration * (float)delta);
@@ -96,12 +96,26 @@ public partial class Player : CharacterBody3D {
         Velocity = velocity;
 	}
 
-	private void HandleJump() {
-		if (Input.IsActionJustPressed("Jump") && IsOnFloor()) {
-            Vector3 velocity = Velocity;
-            velocity.Y = JumpPower;
-            Velocity = velocity;
-        }
+	private void HandleJump(double delta) {
+		bool isOnFloor = IsOnFloor();
+
+		if (_WasOnFloor && !isOnFloor) _CoyoteTimer = _CoyoteTime;
+		if (_CoyoteTimer > 0) _CoyoteTimer -= (float) delta;
+
+		if (Input.IsActionJustPressed("Jump")) _JumpBufferTimer = _JumpBufferTime;
+        
+		if (_JumpBufferTimer > 0) _JumpBufferTimer -= (float) delta;
+		
+		if ((IsOnFloor() || _CoyoteTimer > 0) && _JumpBufferTimer > 0) {
+			Vector3 velocity = Velocity;
+			velocity.Y = JumpPower;
+			Velocity = velocity;
+			_JumpBufferTimer = 0.0f;
+			_CoyoteTimer     = 0.0f;
+		}
+
+		_WasOnFloor = isOnFloor;
+		
 	}
 
 
