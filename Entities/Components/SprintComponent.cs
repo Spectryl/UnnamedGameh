@@ -7,7 +7,7 @@ public class SprintComponent {
 		set {_SprintModifier = value;}
 	}
 
-	public bool IsSprinting {get; private set;}
+	public bool IsSprinting {get; protected set;}
 	private float _SprintModifier;
 
 	public SprintComponent(float sprintModifier = 1.35f) {
@@ -21,9 +21,28 @@ public class SprintComponent {
 }
 
 public class PlayerSprintComponent : SprintComponent {
-    public PlayerSprintComponent(float sprintModifier = 1.35f) : base(sprintModifier) { }
+	public float MaxStamina = 100.0f;
+	public float Stamina {get; private set;}
+	public float DrainRate = 20.0f;
+	public float RegenRate = 10.0f;
+	private bool _IsDepleted = false;
+    public PlayerSprintComponent(float sprintModifier = 1.35f) : base(sprintModifier) {
+		Stamina = MaxStamina;
+	}
 
-    public float GetSpeed(float baseSpeed) {
-        return base.GetSpeed(baseSpeed, Input.IsActionPressed("Sprint"));
+    public float GetSpeed(float baseSpeed, float delta) {
+		UpdateStamina(delta);
+        return IsSprinting && !_IsDepleted ? baseSpeed * SprintModifier : baseSpeed;
     }
+
+	private void UpdateStamina(float delta) {
+			IsSprinting = Input.IsActionPressed("Sprint");
+			if (Stamina <= 0) _IsDepleted = true;
+			if (IsSprinting && !_IsDepleted) {
+				Stamina = Mathf.Max(Stamina - DrainRate * delta, 0);
+			} else {
+				Stamina = Mathf.Min(Stamina + RegenRate * delta, MaxStamina);
+				if (_IsDepleted && Stamina > MaxStamina * 0.25f) _IsDepleted = false;
+			}
+	}
 }

@@ -6,6 +6,7 @@ public static partial class UIDS {
     public static string MainMenu           = "uid://bqv8yslakfos5";
     public static string Game               = "uid://c2ydyfyiht6hp";
     public static string Player             = "uid://c7t4yrkqkmd7s";
+    public static string PlayerHud          = "uid://cg2kl2na4igmr";
     // Main Menu Submenus
     public static string TitleScreen        = "uid://cshj62srbydfl";
     public static string JoinMenu           = "uid://dt33l8luvib0b";

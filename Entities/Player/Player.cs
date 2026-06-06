@@ -56,12 +56,13 @@ public partial class Player : CharacterBody3D {
 		if (IsMultiplayerAuthority()) {
 			_Camera.MakeCurrent();
 			Input.MouseMode = Input.MouseModeEnum.Captured;
+			SetupHUD();
 		}
 
 		Speed = 10.0f;
-		Sprint.SprintModifier = 2.5f;
+		Sprint.SprintModifier = 1.5f;
 		JumpPower = 6f;
-		Acceleration = 10f;
+		Acceleration = 60f;
 	}
     public override void _ExitTree() {
         GameManager.PlayerList.Remove(this);
@@ -83,7 +84,7 @@ public partial class Player : CharacterBody3D {
 		Vector2 inputDirection = Input.GetVector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward");
 		Vector3 direction = (Transform.Basis * new Vector3(inputDirection.X, 0, inputDirection.Y)).Normalized();
 		Vector3 velocity = this.Velocity;
-		float speed = Sprint.GetSpeed(Speed);
+		float speed = Sprint.GetSpeed(Speed, (float)delta);
 		
 		if (direction != Vector3.Zero) {
             velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, Acceleration * (float)delta);
@@ -129,4 +130,9 @@ public partial class Player : CharacterBody3D {
 			_Camera.Rotation = rotation;
 		}
     }
+
+	private void SetupHUD() {
+		CanvasLayer playerHud = (CanvasLayer) GD.Load<PackedScene>(UIDS.PlayerHud).Instantiate();
+		AddChild(playerHud);
+	}
 }

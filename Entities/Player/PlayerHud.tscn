@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://cg2kl2na4igmr"]
+
+[ext_resource type="Script" uid="uid://dwst7pn2pfjsm" path="res://Entities/Player/PlayerHud.cs" id="1_yb4cm"]
+[ext_resource type="Texture2D" uid="uid://dvuwlenlsa7lg" path="res://Entities/Player/Crosshair.png" id="2_cqks7"]
+
+[node name="PlayerHud" type="CanvasLayer" unique_id=90520989]
+script = ExtResource("1_yb4cm")
+
+[node name="Control" type="Control" parent="." unique_id=184384215]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CrosshairContainer" type="CenterContainer" parent="Control" unique_id=1474954207]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CrosshairTexture" type="TextureRect" parent="Control/CrosshairContainer" unique_id=1827961663]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_cqks7")
+stretch_mode = 4
