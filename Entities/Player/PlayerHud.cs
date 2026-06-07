@@ -1,15 +1,10 @@
 using Godot;
 using System;
 
-public partial class PlayerHud : CanvasLayer
-{
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready() {
-		
-	}
+public partial class PlayerHud : CanvasLayer {
+	private TextureRect _CrosshairTexture;
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
+    public override void _Ready() {
+        _CrosshairTexture = GetNode<TextureRect>("Control/CrosshairContainer/CrosshairTexture");
+    }
 }

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cn6ombpyvwtce"]
+
+[ext_resource type="Script" uid="uid://dgu75wo0bej8k" path="res://Levels/Level.cs" id="1_byksc"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_riikv"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_ujh0g"]
+sky_material = SubResource("ProceduralSkyMaterial_riikv")
+
+[sub_resource type="Environment" id="Environment_byksc"]
+background_mode = 2
+sky = SubResource("Sky_ujh0g")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="TerrainLevelGenerator" type="Node" unique_id=335526685]
+script = ExtResource("1_byksc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=553995992]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=117283404]
+environment = SubResource("Environment_byksc")

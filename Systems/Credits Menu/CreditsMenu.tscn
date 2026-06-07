@@ -42,7 +42,7 @@ alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=170241607]
 layout_mode = 2
-text = "Credits"
+text = "Terrain3D - Cory Petkovsek & Roope Palmroos"
 
 [node name="Label2" type="Label" parent="MarginContainer2/PanelContainer/ScrollContainer/VBoxContainer" unique_id=552014266]
 layout_mode = 2

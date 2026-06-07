@@ -117,6 +117,13 @@ public partial class Player : CharacterBody3D {
 
 		_WasOnFloor = isOnFloor;
 		
+		if (Input.IsActionJustPressed("Jump")) {
+						Vector3 velocity = Velocity;
+			velocity.Y = JumpPower;
+			Velocity = velocity;
+			_JumpBufferTimer = 0.0f;
+			_CoyoteTimer     = 0.0f;
+		}
 	}
 
 
