@@ -4,7 +4,7 @@ public static partial class UIDS {
 
     // Core Logic
     public static string MainMenu           = "uid://bqv8yslakfos5";
-    public static string Game               = "uid://cn6ombpyvwtce";//"uid://c2ydyfyiht6hp";
+    public static string Game               = "uid://c2ydyfyiht6hp";//"uid://cn6ombpyvwtce";
     public static string Player             = "uid://c7t4yrkqkmd7s";
     public static string PlayerHud          = "uid://cg2kl2na4igmr";
     // Main Menu Submenus
@@ -20,5 +20,8 @@ public static partial class UIDS {
     public static string OptionScreenSelect = "uid://dj4kr0qldtvnt";
     public static string VideoOptions       = "uid://c630v5gbb3c5q";
 
+
+    // Items
+    public static string HeldGun            = "uid://biaaunul420ct";
 
 }

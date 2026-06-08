@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bdadyan3f6uop"]
+
+[ext_resource type="PackedScene" uid="uid://dxuhjoa4yp5l8" path="res://Assets/Models/Items/Pistol.glb" id="1_5032d"]
+[ext_resource type="Script" uid="uid://cnfup7kronn5e" path="res://Entities/Items/Pistol/GunPickable.cs" id="1_l286j"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5032d"]
+size = Vector3(4, 3, 4)
+
+[node name="PickableGun" type="RigidBody3D" unique_id=1279916977]
+script = ExtResource("1_l286j")
+ItemName = "Gun"
+
+[node name="Pistol" parent="." unique_id=509136351 instance=ExtResource("1_5032d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2079998, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=804066585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_5032d")

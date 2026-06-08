@@ -20,3 +20,9 @@ debug_color = Color(0.9771002, 0, 0.41040254, 0.41960785)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1083243165]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8280009, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=2053501928]
+target_position = Vector3(0, 0, -2.5)
+
+[node name="HandSlot" type="Node3D" parent="Camera3D" unique_id=1081337233]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.3, -0.5)

@@ -21,6 +21,7 @@ public partial class Player : CharacterBody3D {
 
 	public HealthComponent Health = new HealthComponent(100);
 	public PlayerSprintComponent Sprint = new PlayerSprintComponent();
+	public PlayerInventory Inventory    = new PlayerInventory();
 
 	private float MouseSensitivity = 0.005f; //TODO: Add this to options menu
 	private float Friction { // TODO: Should be based on ground so later ig
@@ -37,6 +38,9 @@ public partial class Player : CharacterBody3D {
 	private Camera3D _Camera;
 	private MeshInstance3D _Mesh;
 	private CollisionShape3D _CollisionShape;
+	private RayCast3D        _InteractRayCast;
+	private Node3D _HandSlot;
+	private HeldItem _HeldItem;
 	
 
     public override void _Ready() {
@@ -45,6 +49,8 @@ public partial class Player : CharacterBody3D {
 		_Mesh = GetNode<MeshInstance3D>("MeshInstance3D");
 		_CollisionShape = GetNode<CollisionShape3D>("CollisionShape3D");
 		_Camera = GetNode<Camera3D>("Camera3D");
+		_InteractRayCast = GetNode<RayCast3D>("Camera3D/RayCast3D");
+		_HandSlot       = GetNode<Node3D>("Camera3D/HandSlot");
 
 		SetMultiplayerAuthority(int.Parse(Name));
 
@@ -57,6 +63,7 @@ public partial class Player : CharacterBody3D {
 			_Camera.MakeCurrent();
 			Input.MouseMode = Input.MouseModeEnum.Captured;
 			SetupHUD();
+			Inventory.SelectedSlotChanged += OnSelectedSlotChanged;
 		}
 
 		Speed = 10.0f;
@@ -129,17 +136,50 @@ public partial class Player : CharacterBody3D {
 
     public override void _UnhandledInput(InputEvent @event) {
 		if (!IsMultiplayerAuthority()) return;
-        if (@event is InputEventMouseMotion mouseMovement) {
+		HandleMouseLook(@event);
+		if (@event.IsActionPressed("Interact"))    TryInteract();
+		if (@event.IsActionPressed("ScrollUp"))   Inventory.SelectPrevious();
+		if (@event.IsActionPressed("ScrollDown")) Inventory.SelectNext();
+		for (int i = 0; i < Inventory.Size; i++) {
+			if (@event.IsActionPressed($"Slot{i + 1}")) Inventory.SelectSlot(i);
+		}
+    }
+
+	private void OnSelectedSlotChanged(int slot) {
+		GD.Print($"Slot changed to {slot}");
+		GD.Print($"Item in slot: {Inventory.Slots[slot]?.Name ?? "null"}");
+		GD.Print($"OnSelectedSlotChanged: slot {slot}, Slots[slot] = {Inventory.Slots[slot]?.Name ?? "null"}");
+		_HeldItem?.QueueFree();
+		_HeldItem = null;
+		ItemData item = Inventory.Slots[slot];
+		if (item?.HeldScene == null) {
+			GD.Print($"No held scene path for item: {item?.Name ?? "null"}");
+			return;
+		}
+		GD.Print($"Loading scene: {item.HeldScene}");
+		_HeldItem = GD.Load<PackedScene>(item.HeldScene).Instantiate<Node3D>() as HeldItem;
+		_HandSlot.AddChild(_HeldItem);
+		_HeldItem.Setup(item);
+	}
+
+	private void SetupHUD() {
+		CanvasLayer playerHud = (CanvasLayer) GD.Load<PackedScene>(UIDS.PlayerHud).Instantiate();
+		AddChild(playerHud);
+	}
+
+	private void HandleMouseLook(InputEvent @event) {
+		if (@event is InputEventMouseMotion mouseMovement) {
 			RotateY(-mouseMovement.Relative.X * MouseSensitivity);
 			_Camera.RotateX(-mouseMovement.Relative.Y * MouseSensitivity);
 			Vector3 rotation = _Camera.Rotation;
 			rotation.X = Mathf.Clamp(rotation.X, -Mathf.Pi / 2, Mathf.Pi / 2);
 			_Camera.Rotation = rotation;
 		}
-    }
+	}
 
-	private void SetupHUD() {
-		CanvasLayer playerHud = (CanvasLayer) GD.Load<PackedScene>(UIDS.PlayerHud).Instantiate();
-		AddChild(playerHud);
+	private void TryInteract() {
+		if (!_InteractRayCast.IsColliding()) return;
+		if (_InteractRayCast.GetCollider() is Pickable pickable) pickable.PickUp(this);
+		
 	}
 }
