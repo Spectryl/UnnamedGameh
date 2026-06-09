@@ -104,6 +104,12 @@ public partial class Player : CharacterBody3D {
         Velocity = velocity;
 	}
 
+	public float GetCameraRotationX() => _Camera.Rotation.X;
+	public void SetCameraRotationX(float x) {
+		Vector3 rotation = _Camera.Rotation;
+		rotation.X = x;
+		_Camera.Rotation = rotation;
+	}
 	private void HandleJump(double delta) {
 		bool isOnFloor = IsOnFloor();
 
@@ -147,22 +153,21 @@ public partial class Player : CharacterBody3D {
     }
 
 	private void OnSelectedSlotChanged(int slot) {
-		GD.Print($"Slot changed to {slot}");
-		GD.Print($"Item in slot: {Inventory.Slots[slot]?.Name ?? "null"}");
-		GD.Print($"OnSelectedSlotChanged: slot {slot}, Slots[slot] = {Inventory.Slots[slot]?.Name ?? "null"}");
-		_HeldItem?.QueueFree();
-		_HeldItem = null;
-		ItemData item = Inventory.Slots[slot];
-		if (item?.HeldScene == null) {
-			GD.Print($"No held scene path for item: {item?.Name ?? "null"}");
-			return;
-		}
-		GD.Print($"Loading scene: {item.HeldScene}");
-		_HeldItem = GD.Load<PackedScene>(item.HeldScene).Instantiate<Node3D>() as HeldItem;
-		_HandSlot.AddChild(_HeldItem);
-		_HeldItem.Setup(item);
+		if (IsMultiplayerAuthority()) Rpc(nameof(RpcEquipItem), (int)(Inventory.Slots[slot]?.Type ?? ItemData.ItemType.None));
 	}
 
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
+	public void RpcEquipItem(int itemType) {
+		_HeldItem?.QueueFree();
+		_HeldItem = null;
+		string scenePath = ItemData.GetHeldScene((ItemData.ItemType)itemType);
+		if (scenePath == null) return;
+		_HeldItem = GD.Load<PackedScene>(scenePath).Instantiate<Node3D>() as HeldItem;
+		_HandSlot.AddChild(_HeldItem);
+		if (IsMultiplayerAuthority()) _HeldItem.Setup(Inventory.Slots[Inventory.SelectedSlot]);
+		else _HeldItem.SetupRemote();
+		
+	}
 	private void SetupHUD() {
 		PlayerHud playerHud = (PlayerHud) GD.Load<PackedScene>(UIDS.PlayerHud).Instantiate();
 		AddChild(playerHud);

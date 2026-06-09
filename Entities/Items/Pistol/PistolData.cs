@@ -7,6 +7,7 @@ public class PistolData : ItemData {
 	public float FireRate = 0.1f;
 	public override string HeldScene => UIDS.HeldPistol;
     public override string PickupScene => UIDS.PickupPistol;
+	public override ItemType Type => ItemType.Pistol;
 	public PistolData() {
 		Name = "Pistol";
 		CurrentAmmo = MaxAmmo;

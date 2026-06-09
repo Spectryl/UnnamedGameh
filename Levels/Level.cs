@@ -5,8 +5,8 @@ public partial class Level : Node {
     private TerrainGenerator _TerrainGenerator;
 
     public override void _Ready() {
-        _TerrainGenerator = new TerrainGenerator();
-        AddChild(_TerrainGenerator);
+        //_TerrainGenerator = new TerrainGenerator();
+        //AddChild(_TerrainGenerator);
         TerrainGenerator.TerrainReady += OnTerrainReady;
         ServerManager.GameStarted += CreateAllPlayers;
         ReadyManager.LevelLoaded?.Invoke();
@@ -33,10 +33,10 @@ public partial class Level : Node {
         AddChild(newPlayer);
         float x = (float)GD.RandRange(-50, 50);
         float z = (float)GD.RandRange(-50, 50);
-        float y = _TerrainGenerator.terrain3D != null
-            ? (float)_TerrainGenerator.terrain3D.Data.GetHeight(new Vector3(x, 0, z)) + 2.0f
-            : 5.0f;
-        newPlayer.GlobalPosition = new Vector3(x, y, z);
+        //float y = _TerrainGenerator.terrain3D != null
+        //    ? (float)_TerrainGenerator.terrain3D.Data.GetHeight(new Vector3(x, 0, z)) + 2.0f
+        //    : 5.0f;
+        newPlayer.GlobalPosition = new Vector3(x, 5f, z);
         newPlayer.GiveItem(new AppleData());
         //newPlayer.GiveItem(new PistolData());
     }

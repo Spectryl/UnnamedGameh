@@ -23,19 +23,21 @@ public partial class PlayerSyncManager : Node {
         Player localPlayer = GameManager.PlayerList.Find(p => p.Name == _LocalId);
         if (localPlayer == null) return;
         int offset = 0;
-        byte[] data = new byte[24];
+        byte[] data = new byte[28];
         float xPosition = localPlayer.GlobalPosition.X;
         float yPosition = localPlayer.GlobalPosition.Y;
         float zPosition = localPlayer.GlobalPosition.Z;
         float xRotation = localPlayer.GlobalRotation.X;
         float yRotation = localPlayer.GlobalRotation.Y;
         float zRotation = localPlayer.GlobalRotation.Z;
+        float cameraX   = localPlayer.GetCameraRotationX();
         Buffer.BlockCopy(BitConverter.GetBytes(xPosition), 0, data, offset,      4);
         Buffer.BlockCopy(BitConverter.GetBytes(yPosition), 0, data, offset + 4,  4);
         Buffer.BlockCopy(BitConverter.GetBytes(zPosition), 0, data, offset + 8,  4);
         Buffer.BlockCopy(BitConverter.GetBytes(xRotation), 0, data, offset + 12, 4);
         Buffer.BlockCopy(BitConverter.GetBytes(yRotation), 0, data, offset + 16, 4);
         Buffer.BlockCopy(BitConverter.GetBytes(zRotation), 0, data, offset + 20, 4);
+        Buffer.BlockCopy(BitConverter.GetBytes(cameraX),   0, data, offset + 24, 4);
         Rpc(nameof(RpcSyncPlayer), _LocalId, data);
     }
 
@@ -50,7 +52,9 @@ public partial class PlayerSyncManager : Node {
         float xRotation = BitConverter.ToSingle(data, 12);
         float yRotation = BitConverter.ToSingle(data, 16);
         float zRotation = BitConverter.ToSingle(data, 20);
+        float cameraX   = BitConverter.ToSingle(data, 24);
         player.GlobalPosition = player.GlobalPosition.Lerp(new Vector3(xPosition, yPosition, zPosition), 0.3f);
         player.GlobalRotation = player.GlobalRotation.Lerp(new Vector3(xRotation, yRotation, zRotation), 0.3f);
+        player.SetCameraRotationX(cameraX);
     }
 }
