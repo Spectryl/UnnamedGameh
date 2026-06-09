@@ -184,14 +184,27 @@ public partial class Player : CharacterBody3D {
 	}
 
 	private void TryDrop() {
-		ItemData item = Inventory.SelectedItem;
-		if (item == null) return;
+		ItemData item = Inventory.Slots[Inventory.SelectedSlot];
+		if (item?.PickupScene == null) return;
 		Inventory.RemoveItem(Inventory.SelectedSlot);
-		
+
 		Pickable dropped = GD.Load<PackedScene>(item.PickupScene).Instantiate<Pickable>();
 		dropped.Data = item;
 		GetTree().CurrentScene.AddChild(dropped);
-		dropped.GlobalPosition = GlobalPosition + (-Transform.Basis.Z * 1.5f);
+		dropped.GlobalPosition = _Camera.GlobalPosition + (-_Camera.GlobalTransform.Basis.Z * 0.5f);
+		
+		Vector3 throwDirection = -_Camera.GlobalTransform.Basis.Z;
+		float throwForce = 8.0f;
+
+		Vector3 throwVelocity = throwDirection * throwForce + Velocity;
+		if (!IsOnFloor()) throwVelocity += Vector3.Up * 3.0f;
+		
+		dropped.LinearVelocity = throwVelocity;
+		dropped.AngularVelocity = new Vector3(
+			(float)GD.RandRange(-5.0, 5.0),
+			(float)GD.RandRange(-5.0, 5.0),
+			(float)GD.RandRange(-5.0, 5.0)
+		);
 	}
 	public void GiveItem(ItemData item) {
 		Inventory.AddItem(item);
