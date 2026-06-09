@@ -7,8 +7,6 @@ public partial class AppleData : ItemData {
 	public int HealAmount = 50;
 	public int HealsRemaining = 3;
 	public int TotalHeals = 3;
-    public override string HeldScene => UIDS.HeldApple;
-    public override string PickupScene => UIDS.PickupApple;
     public override ItemType Type => ItemType.Apple;
 
 	public AppleData() {

@@ -191,26 +191,32 @@ public partial class Player : CharacterBody3D {
 
 	private void TryDrop() {
 		ItemData item = Inventory.Slots[Inventory.SelectedSlot];
-		if (item?.PickupScene == null) return;
+		if (item?.Type == null) return;
+
+		Vector3 camPos = _Camera.GlobalPosition;
+        Vector3 throwDir = -_Camera.GlobalTransform.Basis.Z;
+        bool isOnFloor = IsOnFloor();
 		Inventory.RemoveItem(Inventory.SelectedSlot);
-
-		Pickable dropped = GD.Load<PackedScene>(item.PickupScene).Instantiate<Pickable>();
-		dropped.Data = item;
-		GetTree().CurrentScene.AddChild(dropped);
-		dropped.GlobalPosition = _Camera.GlobalPosition + (-_Camera.GlobalTransform.Basis.Z * 0.5f);
-		
-		Vector3 throwDirection = -_Camera.GlobalTransform.Basis.Z;
+		Rpc(nameof(RpcDropItem), (int) item.Type, item.Uses, item.MaxUses, camPos, throwDir, Velocity, isOnFloor);
+	}
+	
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
+	private void RpcDropItem(int itemType, int uses, int maxUses, Vector3 camPos, Vector3 throwDir, Vector3 playerVelocity, bool isOnFloor) {
+		Pickable dropped = GD.Load<PackedScene>(ItemData.GetPickupScene(itemType)).Instantiate<Pickable>();
+		dropped.Data = ItemData.CreateInstance(itemType, uses, maxUses);
+		GetTree().CurrentScene.AddChild(dropped, true);
+		dropped.GlobalPosition = camPos + (throwDir * 0.5f);
 		float throwForce = 8.0f;
-
-		Vector3 throwVelocity = throwDirection * throwForce + Velocity;
-		if (!IsOnFloor()) throwVelocity += Vector3.Up * 3.0f;
-		
-		dropped.LinearVelocity = throwVelocity;
-		dropped.AngularVelocity = new Vector3(
-			(float)GD.RandRange(-5.0, 5.0),
-			(float)GD.RandRange(-5.0, 5.0),
-			(float)GD.RandRange(-5.0, 5.0)
-		);
+        Vector3 throwVelocity = throwDir * throwForce + playerVelocity;
+        if (!isOnFloor) throwVelocity += Vector3.Up * 3.0f;
+        
+        dropped.LinearVelocity = throwVelocity;
+		if (!ServerManager.IsHost()) return;
+        dropped.AngularVelocity = new Vector3(
+            (float)GD.RandRange(-5.0, 5.0),
+            (float)GD.RandRange(-5.0, 5.0),
+            (float)GD.RandRange(-5.0, 5.0)
+        );
 	}
 	public void GiveItem(ItemData item) {
 		Inventory.AddItem(item);
