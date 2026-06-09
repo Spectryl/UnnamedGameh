@@ -7,6 +7,8 @@ public partial class ItemData {
 	public string Description = "";
 	public virtual string HeldScene   => null;
 	public virtual string PickupScene => null;
+	public virtual int Uses    { get; set; }
+    public virtual int MaxUses { get; set; }
 	private static Texture2D _atlas;
 	private static Texture2D Atlas => _atlas ??= GD.Load<Texture2D>("res://Assets/ItemAtlas.png");
 	protected static AtlasTexture GetIcon(Vector2I gridPosition) {

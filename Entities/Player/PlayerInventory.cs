@@ -41,6 +41,8 @@ public partial class PlayerInventory {
         SelectedSlotChanged?.Invoke(slot);
     }
 
+    public void NotifySlotChanged() => SlotChanged?.Invoke(SelectedSlot, Slots[SelectedSlot]);
+
     public void SelectNext() => SelectSlot((SelectedSlot + 1) % Size);
     public void SelectPrevious() => SelectSlot((SelectedSlot - 1 + Size) % Size);
 }

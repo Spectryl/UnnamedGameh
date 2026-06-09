@@ -33,6 +33,7 @@ public partial class HeldApple : HeldItem {
 		if (player == null) player = GetParent().GetParent().GetParent() as Player;
 		if (player == null) return;
 		_Data.Heal(player);
+		player.Inventory.NotifySlotChanged();
 		UpdateSlices();
 		if (_Data.HealsRemaining <= 0) {
 			player.Inventory.RemoveItem(player.Inventory.SelectedSlot);

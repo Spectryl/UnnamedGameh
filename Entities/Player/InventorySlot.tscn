@@ -20,4 +20,5 @@ layout_mode = 2
 
 [node name="Uses" type="Label" parent="MarginContainer" unique_id=1793176508]
 layout_mode = 2
+size_flags_vertical = 0
 horizontal_alignment = 2

@@ -33,11 +33,7 @@ public partial class InventorySlot : PanelContainer {
             return;
         }
         _Icon.Texture = item.Icon;
-        _Uses.Text = item switch {
-            PistolData gun     => $"{gun.CurrentAmmo}/{gun.MaxAmmo}",
-            AppleData apple => $"{apple.HealsRemaining}",
-            _               => ""
-        };
+        _Uses.Text    = item.MaxUses > 0 ? $"{item.Uses}/{item.MaxUses}" : "";
     }
 
     public void SetSelected(bool selected) {

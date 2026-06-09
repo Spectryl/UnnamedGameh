@@ -25,6 +25,7 @@ public partial class HeldPistol : HeldItem {
         }
         if (!_ShootRay.IsColliding()) return;
         _Data.CurrentAmmo--;
+        GetPlayer().Inventory.NotifySlotChanged();
         GD.Print($"Shot! Ammo remaining: {_Data.CurrentAmmo}");
 
         if (_ShootRay.GetCollider() is Player player) {
@@ -40,5 +41,14 @@ public partial class HeldPistol : HeldItem {
         _Data.CurrentAmmo = _Data.MaxAmmo;
         _IsReloading = false;
         GD.Print("Reloaded!");
+    }
+
+    private Player GetPlayer() {
+        Node node = GetParent();
+        while (node != null) {
+            if (node is Player player) return player;
+            node = node.GetParent();
+        }
+        return null;
     }
 }

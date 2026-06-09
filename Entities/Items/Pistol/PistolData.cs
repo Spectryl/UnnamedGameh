@@ -1,4 +1,6 @@
 public class PistolData : ItemData {
+	public override int Uses    { get => CurrentAmmo;  set => CurrentAmmo = value; }
+    public override int MaxUses { get => MaxAmmo;      set => MaxAmmo = value; }
 	public int Damage = 10;
 	public int MaxAmmo = 30;
 	public int CurrentAmmo;
