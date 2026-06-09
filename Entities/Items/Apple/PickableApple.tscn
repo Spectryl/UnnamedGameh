@@ -10,7 +10,6 @@ radius = 0.25
 script = ExtResource("1_yoggr")
 
 [node name="Apple" parent="." unique_id=1749811941 instance=ExtResource("1_5kdpr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20200007, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1626165486]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
