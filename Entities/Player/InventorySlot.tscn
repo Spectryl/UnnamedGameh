@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://nflibirwao56"]
+
+[ext_resource type="Script" uid="uid://clrvnlbn6x10v" path="res://Entities/Player/InventorySlot.cs" id="1_cfhji"]
+
+[node name="InventorySlot" type="PanelContainer" unique_id=936844853]
+custom_minimum_size = Vector2(64, 64)
+anchors_preset = -1
+anchor_right = 0.05
+anchor_bottom = 0.089
+offset_bottom = -0.08000183
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cfhji")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1570395647]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MarginContainer" unique_id=1273508398]
+layout_mode = 2
+
+[node name="Uses" type="Label" parent="MarginContainer" unique_id=1793176508]
+layout_mode = 2
+horizontal_alignment = 2

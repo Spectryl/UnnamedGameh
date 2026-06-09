@@ -164,8 +164,9 @@ public partial class Player : CharacterBody3D {
 	}
 
 	private void SetupHUD() {
-		CanvasLayer playerHud = (CanvasLayer) GD.Load<PackedScene>(UIDS.PlayerHud).Instantiate();
+		PlayerHud playerHud = (PlayerHud) GD.Load<PackedScene>(UIDS.PlayerHud).Instantiate();
 		AddChild(playerHud);
+		playerHud.Setup(Inventory);
 	}
 
 	private void HandleMouseLook(InputEvent @event) {

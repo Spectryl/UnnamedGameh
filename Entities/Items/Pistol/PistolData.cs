@@ -8,5 +8,6 @@ public class PistolData : ItemData {
 	public PistolData() {
 		Name = "Pistol";
 		CurrentAmmo = MaxAmmo;
+		Icon = GetIcon(new Godot.Vector2I(1,0));
 	}
 }

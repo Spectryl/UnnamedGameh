@@ -10,6 +10,7 @@ public partial class AppleData : ItemData {
 
 	public AppleData() {
 		Name = "Apple";
+        Icon = GetIcon(new Vector2I(2,0));
 	}
 	public bool CanHeal() => HealsRemaining > 0;
 
