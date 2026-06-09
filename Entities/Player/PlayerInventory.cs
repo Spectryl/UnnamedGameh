@@ -32,6 +32,7 @@ public partial class PlayerInventory {
     public void RemoveItem(int slot) {
         Slots[slot] = null;
         SlotChanged?.Invoke(slot, null);
+        if (slot == SelectedSlot) SelectedSlotChanged?.Invoke(slot);
     }
 
     public void SelectSlot(int slot) {

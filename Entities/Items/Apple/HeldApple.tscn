@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bvnj0o36jedxq"]
+
+[ext_resource type="Script" uid="uid://b41msmwj5te8j" path="res://Entities/Items/Apple/HeldApple.cs" id="1_2xkih"]
+[ext_resource type="PackedScene" uid="uid://bsuvyxj876hmc" path="res://Assets/Models/Items/Apple.glb" id="2_6etav"]
+
+[node name="HeldApple" type="Node3D" unique_id=680902188]
+script = ExtResource("1_2xkih")
+
+[node name="Apple" parent="." unique_id=208040623 instance=ExtResource("2_6etav")]

@@ -37,6 +37,8 @@ public partial class Level : Node {
             ? (float)_TerrainGenerator.terrain3D.Data.GetHeight(new Vector3(x, 0, z)) + 2.0f
             : 5.0f;
         newPlayer.GlobalPosition = new Vector3(x, y, z);
+        //newPlayer.GiveItem(new AppleData());
+        newPlayer.GiveItem(new PistolData());
     }
 
     private void RemovePlayer(int id) {

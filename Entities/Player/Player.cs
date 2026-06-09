@@ -138,8 +138,9 @@ public partial class Player : CharacterBody3D {
 		if (!IsMultiplayerAuthority()) return;
 		HandleMouseLook(@event);
 		if (@event.IsActionPressed("Interact"))    TryInteract();
-		if (@event.IsActionPressed("ScrollUp"))   Inventory.SelectPrevious();
-		if (@event.IsActionPressed("ScrollDown")) Inventory.SelectNext();
+		if (@event.IsActionPressed("Drop"))        TryDrop();
+		if (@event.IsActionPressed("ScrollUp"))    Inventory.SelectPrevious();
+		if (@event.IsActionPressed("ScrollDown"))  Inventory.SelectNext();
 		for (int i = 0; i < Inventory.Size; i++) {
 			if (@event.IsActionPressed($"Slot{i + 1}")) Inventory.SelectSlot(i);
 		}
@@ -180,6 +181,19 @@ public partial class Player : CharacterBody3D {
 	private void TryInteract() {
 		if (!_InteractRayCast.IsColliding()) return;
 		if (_InteractRayCast.GetCollider() is Pickable pickable) pickable.PickUp(this);
+	}
+
+	private void TryDrop() {
+		ItemData item = Inventory.SelectedItem;
+		if (item == null) return;
+		Inventory.RemoveItem(Inventory.SelectedSlot);
 		
+		Pickable dropped = GD.Load<PackedScene>(item.PickupScene).Instantiate<Pickable>();
+		dropped.Data = item;
+		GetTree().CurrentScene.AddChild(dropped);
+		dropped.GlobalPosition = GlobalPosition + (-Transform.Basis.Z * 1.5f);
+	}
+	public void GiveItem(ItemData item) {
+		Inventory.AddItem(item);
 	}
 }

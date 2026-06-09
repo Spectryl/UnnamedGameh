@@ -13,6 +13,7 @@ public partial class TerrainGenerator : Node {
 	private async Task CreateTerrainAsync() {
 		await CreateTerrain();
 		TerrainReady?.Invoke();
+		
 	}
 
 	private async Task CreateTerrain() {
@@ -48,12 +49,16 @@ public partial class TerrainGenerator : Node {
 		assets.SetTextureAsset(1, brownTa);
 		assets.SetMeshAsset(0, grassMa);
 		
-		var noise = new FastNoiseLite { Frequency = 0.0005f };
-		var img = Image.CreateEmpty(2048, 2048, false, Image.Format.Rf);
-		for (int x = 0; x < img.GetWidth(); x++){
-			for (int y = 0; y < img.GetHeight(); y++)img.SetPixel(x, y, new Color(noise.GetNoise2D(x, y), 0f, 0f, 1f));
-
-		}
+		var noise = new FastNoiseLite { Frequency = 0.0001f };
+		var img = await Task.Run(() => {
+			var image = Image.CreateEmpty(2048, 2048, false, Image.Format.Rf);
+			for (int x = 0; x < image.GetWidth(); x++) {
+				for (int y = 0; y < image.GetHeight(); y++) {
+					image.SetPixel(x, y, new Color(noise.GetNoise2D(x, y), 0f, 0f, 1f));
+				}
+			}
+			return image;
+		});
 		terrain3D.RegionSize = Terrain3D.RegionSizeEnum.Size1024;
 		var data = terrain3D.Data;
 		var images = new Godot.Collections.Array { img, new Variant(), new Variant() };
@@ -73,6 +78,7 @@ public partial class TerrainGenerator : Node {
 			}
 		}
 		instancer.AddTransforms(0, xforms);
+		
 	}
 
 	private async Task<Terrain3DTextureAsset> CreateTextureAsset(string assetName, Gradient gradient, int textureSize = 512) {

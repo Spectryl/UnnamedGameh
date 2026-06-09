@@ -22,6 +22,10 @@ public static partial class UIDS {
 
 
     // Items
-    public static string HeldGun            = "uid://biaaunul420ct";
+    public static string HeldPistol         = "uid://biaaunul420ct";
+    public static string PickupPistol       = "uid://bdadyan3f6uop";
+
+    public static string HeldApple          = "uid://bvnj0o36jedxq";
+    public static string PickupApple        = "uid://c4c3rd0nim1t1";
 
 }

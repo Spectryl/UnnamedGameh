@@ -1,7 +1,7 @@
 using Godot;
 
-public partial class HeldGun : HeldItem {
-    private GunData _Data;
+public partial class HeldPistol : HeldItem {
+    private PistolData _Data;
     private RayCast3D _ShootRay;
     private bool _IsReloading = false;
 
@@ -10,7 +10,7 @@ public partial class HeldGun : HeldItem {
     }
 
     public override void Setup(ItemData data) {
-        _Data = data as GunData;
+        _Data = data as PistolData;
     }
 
     public override void _UnhandledInput(InputEvent @event) {

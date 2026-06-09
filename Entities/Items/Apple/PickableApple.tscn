@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://c4c3rd0nim1t1"]
+
+[ext_resource type="PackedScene" uid="uid://bsuvyxj876hmc" path="res://Assets/Models/Items/Apple.glb" id="1_5kdpr"]
+[ext_resource type="Script" uid="uid://b0uvlwp8focg6" path="res://Entities/Items/Apple/PickableApple.cs" id="1_yoggr"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5kdpr"]
+radius = 0.25
+
+[node name="PickableApple" type="RigidBody3D" unique_id=207915665]
+script = ExtResource("1_yoggr")
+
+[node name="Apple" parent="." unique_id=1749811941 instance=ExtResource("1_5kdpr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20200007, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1626165486]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("SphereShape3D_5kdpr")
+debug_color = Color(0.24839312, 0.63597363, 0, 0.41960785)

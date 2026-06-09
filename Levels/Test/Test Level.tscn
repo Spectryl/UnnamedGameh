@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dgu75wo0bej8k" path="res://Levels/Level.cs" id="1_d062v"]
 [ext_resource type="Texture2D" uid="uid://dpn2cmn7w0bw5" path="res://addons/kenney_prototype_textures/dark/texture_07.png" id="1_iybhw"]
-[ext_resource type="PackedScene" uid="uid://bdadyan3f6uop" path="res://Entities/Items/Pistol/PickableGun.tscn" id="3_ujh0g"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_d062v"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -53,6 +52,3 @@ shape = SubResource("BoxShape3D_d062v")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/StaticBody3D" unique_id=1937497561]
 transform = Transform3D(0.099999994, 0, 0, 0, 0.099999994, 0, 0, 0, 0.099999994, 0, 0.050700035, -0.0536)
 mesh = SubResource("PlaneMesh_3wipj")
-
-[node name="PickableGun" parent="." unique_id=1279916977 instance=ExtResource("3_ujh0g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 176, 0)
