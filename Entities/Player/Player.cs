@@ -153,20 +153,19 @@ public partial class Player : CharacterBody3D {
     }
 
 	private void OnSelectedSlotChanged(int slot) {
-		if (IsMultiplayerAuthority()) Rpc(nameof(RpcEquipItem), (int)(Inventory.Slots[slot]?.Type ?? ItemData.ItemType.None));
+		ItemData item = Inventory.Slots[slot];
+		if (IsMultiplayerAuthority()) Rpc(nameof(RpcEquipItem), (int)(item?.Type ?? ItemData.ItemType.None), item?.Uses ?? 0, item?.MaxUses ?? 0);
 	}
-
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
-	public void RpcEquipItem(int itemType) {
-		_HeldItem?.QueueFree();
+	public void RpcEquipItem(int itemType, int uses, int maxUses) {
+		if (_HeldItem != null && IsInstanceValid(_HeldItem)) _HeldItem.QueueFree();
 		_HeldItem = null;
 		string scenePath = ItemData.GetHeldScene((ItemData.ItemType)itemType);
 		if (scenePath == null) return;
 		_HeldItem = GD.Load<PackedScene>(scenePath).Instantiate<Node3D>() as HeldItem;
 		_HandSlot.AddChild(_HeldItem);
 		if (IsMultiplayerAuthority()) _HeldItem.Setup(Inventory.Slots[Inventory.SelectedSlot]);
-		else _HeldItem.SetupRemote();
-		
+		else _HeldItem.SetupRemote(ItemData.CreateInstance(itemType, uses, maxUses));
 	}
 	private void SetupHUD() {
 		PlayerHud playerHud = (PlayerHud) GD.Load<PackedScene>(UIDS.PlayerHud).Instantiate();
@@ -199,7 +198,7 @@ public partial class Player : CharacterBody3D {
 		Inventory.RemoveItem(Inventory.SelectedSlot);
 		Rpc(nameof(RpcDropItem), (int) item.Type, item.Uses, item.MaxUses, camPos, throwDir, Velocity, isOnFloor);
 	}
-	
+
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
 	private void RpcDropItem(int itemType, int uses, int maxUses, Vector3 camPos, Vector3 throwDir, Vector3 playerVelocity, bool isOnFloor) {
 		Pickable dropped = GD.Load<PackedScene>(ItemData.GetPickupScene(itemType)).Instantiate<Pickable>();

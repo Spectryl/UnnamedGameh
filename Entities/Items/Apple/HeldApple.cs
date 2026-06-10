@@ -23,23 +23,34 @@ public partial class HeldApple : HeldItem {
         if (_Data != null) UpdateSlices();
     }
 
-    public override void _UnhandledInput(InputEvent @event) {
-        if (@event.IsActionPressed("Interact")) TryHeal();
+    public override void SetupRemote(ItemData data) {
+        base.SetupRemote(data);
+		_Data = data as AppleData;
+		if (_Data != null) UpdateSlices();
     }
 
-	private void TryHeal() {
+    public override void _UnhandledInput(InputEvent @event) {
+        if (@event.IsActionPressed("Interact")) PerformAction(HeldItemAction.InteractUse);
+    }
+
+	public override void OnInteractUse() {
 		if (_Data == null || !_Data.CanHeal()) return;
-		Player player = GetOwner<Player>();
-		if (player == null) player = GetParent().GetParent().GetParent() as Player;
+		Player player = GetPlayer();
 		if (player == null) return;
+
 		_Data.Heal(player);
 		player.Inventory.NotifySlotChanged();
-		UpdateSlices();
 		if (_Data.HealsRemaining <= 0) {
 			player.Inventory.RemoveItem(player.Inventory.SelectedSlot);
 			QueueFree();
-		}
-
+		} 
+		else Rpc(nameof(SyncAppleState), _Data.HealsRemaining);
+		
+	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	public void SyncAppleState(int healsRemaining) {
+		_Data.HealsRemaining = healsRemaining;
+		UpdateSlices();
 	}
 
     private void UpdateSlices() {
