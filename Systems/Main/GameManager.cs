@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class GameManager : Node {
 	public static GameManager Instance {get; private set;}
@@ -49,6 +50,9 @@ public partial class GameManager : Node {
 
 
 	public override void _Ready() {
+		GD.Print("GameManager Ready");
+GD.Print("CmdlineArgs: " + string.Join(", ", Godot.OS.GetCmdlineArgs()));
+GD.Print("CmdlineUserArgs: " + string.Join(", ", Godot.OS.GetCmdlineUserArgs()));
 		if (Instance != null) {
 			GD.PrintErr("Error: Multiple GameManager instances detected!");
 			QueueFree();
@@ -65,8 +69,16 @@ public partial class GameManager : Node {
 		SetupServerManager();
 		SetupReadyManager();
 		SetupSyncManager();
-		CurrentState = GameState.MAIN_MENU;
 		OptionScreenToggled += ToggleOptionsScreen;
+		string[] args = Godot.OS.GetCmdlineArgs();
+		if (args.Contains("--host")) {
+			CurrentState = GameState.LOBBY;
+			ServerManager.Instance.CreateServer();
+		} else if (args.Contains("--client")) {
+			CurrentState = GameState.LOBBY;
+			NetworkManager.JoinServer();
+		} else CurrentState = GameState.MAIN_MENU;
+		
 
 	}
     public override void _UnhandledInput(InputEvent @event) {

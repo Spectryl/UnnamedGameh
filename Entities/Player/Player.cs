@@ -34,6 +34,7 @@ public partial class Player : CharacterBody3D {
 	private float _CoyoteTime = 0.15f;
 	private float _CoyoteTimer = 0.00f;
 	private bool _WasOnFloor = false;
+	private bool _Noclip = false;
 
 	private Camera3D _Camera;
 	private MeshInstance3D _Mesh;
@@ -77,9 +78,13 @@ public partial class Player : CharacterBody3D {
 
 	public override void _PhysicsProcess(double delta) {
 		if (!IsMultiplayerAuthority()) return;
-		HandleGravity(delta);
-		HandleMovement(delta);
-		HandleJump(delta);
+		if (_Noclip) {
+			HandleNoclip(delta);
+		} else {
+			HandleGravity(delta);
+			HandleMovement(delta);
+			HandleJump(delta);
+		}
 		MoveAndSlide();
 	}
 
@@ -129,16 +134,22 @@ public partial class Player : CharacterBody3D {
 		}
 
 		_WasOnFloor = isOnFloor;
-		
-		if (Input.IsActionJustPressed("Jump")) {
-						Vector3 velocity = Velocity;
-			velocity.Y = JumpPower;
-			Velocity = velocity;
-			_JumpBufferTimer = 0.0f;
-			_CoyoteTimer     = 0.0f;
-		}
 	}
 
+	private void ToggleNoclip() {
+		_Noclip = !_Noclip;
+		CollisionLayer = _Noclip ? 0u : 1u;
+		CollisionMask  = _Noclip ? 0u : 1u;
+	}
+
+	private void HandleNoclip(double delta) {
+		Vector2 inputDirection = Input.GetVector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward");
+		Vector3 direction = (_Camera.GlobalTransform.Basis * new Vector3(inputDirection.X, 0, inputDirection.Y)).Normalized();
+		if (Input.IsActionPressed("Jump")) direction += Vector3.Up;
+		if (Input.IsKeyPressed(Key.Ctrl)) direction += Vector3.Down;
+		float speed = Sprint.GetSpeed(Speed, (float)delta);
+		Velocity = direction * speed;
+	}
 
     public override void _UnhandledInput(InputEvent @event) {
 		if (!IsMultiplayerAuthority()) return;
@@ -147,6 +158,7 @@ public partial class Player : CharacterBody3D {
 		if (@event.IsActionPressed("Drop"))        TryDrop();
 		if (@event.IsActionPressed("ScrollUp"))    Inventory.SelectPrevious();
 		if (@event.IsActionPressed("ScrollDown"))  Inventory.SelectNext();
+		if (@event.IsActionPressed("Noclip")) ToggleNoclip();
 		for (int i = 0; i < Inventory.Size; i++) {
 			if (@event.IsActionPressed($"Slot{i + 1}")) Inventory.SelectSlot(i);
 		}
@@ -156,6 +168,7 @@ public partial class Player : CharacterBody3D {
 		ItemData item = Inventory.Slots[slot];
 		if (IsMultiplayerAuthority()) Rpc(nameof(RpcEquipItem), (int)(item?.Type ?? ItemData.ItemType.None), item?.Uses ?? 0, item?.MaxUses ?? 0);
 	}
+
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 0)]
 	public void RpcEquipItem(int itemType, int uses, int maxUses) {
 		if (_HeldItem != null && IsInstanceValid(_HeldItem)) _HeldItem.QueueFree();
