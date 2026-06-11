@@ -1,6 +1,14 @@
 [gd_scene format=3 uid="uid://c7t4yrkqkmd7s"]
 
 [ext_resource type="Script" uid="uid://bdtpwfam5lkuk" path="res://Entities/Player/Player.cs" id="1_e5kic"]
+[ext_resource type="Script" uid="uid://cpy20anhvvpg6" path="res://Entities/Player/PlayerStateMachine.cs" id="2_ww0jn"]
+[ext_resource type="Script" uid="uid://bkxoeybspb5qx" path="res://Entities/Player/Player States/IdleState.cs" id="3_1des2"]
+[ext_resource type="Script" uid="uid://b7rp3142f3os5" path="res://Entities/Player/Player States/WalkState.cs" id="4_an6q6"]
+[ext_resource type="Script" uid="uid://b5eram1i1dnnp" path="res://Entities/Player/Player States/SprintState.cs" id="5_t38ms"]
+[ext_resource type="Script" uid="uid://dbrcj8wrsawtd" path="res://Entities/Player/Player States/JumpState.cs" id="6_hj1c0"]
+[ext_resource type="Script" uid="uid://dti1s3woqgjmq" path="res://Entities/Player/Player States/InAirState.cs" id="7_x44r4"]
+[ext_resource type="Script" uid="uid://cgexl12wq4fof" path="res://Entities/Player/Player States/WallRunState.cs" id="8_761t5"]
+[ext_resource type="Script" uid="uid://cqstggc1byvdo" path="res://Entities/Player/Player States/NoClipState.cs" id="9_hacra"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_u36tg"]
 
@@ -26,3 +34,27 @@ target_position = Vector3(0, 0, -2.5)
 
 [node name="HandSlot" type="Node3D" parent="Camera3D" unique_id=1081337233]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.3, -0.8)
+
+[node name="PlayerStateMachine" type="Node" parent="." unique_id=95622640]
+script = ExtResource("2_ww0jn")
+
+[node name="IdleState" type="Node" parent="PlayerStateMachine" unique_id=1250171151]
+script = ExtResource("3_1des2")
+
+[node name="WalkState" type="Node" parent="PlayerStateMachine" unique_id=276198684]
+script = ExtResource("4_an6q6")
+
+[node name="SprintState" type="Node" parent="PlayerStateMachine" unique_id=340971000]
+script = ExtResource("5_t38ms")
+
+[node name="JumpState" type="Node" parent="PlayerStateMachine" unique_id=683015562]
+script = ExtResource("6_hj1c0")
+
+[node name="InAirState" type="Node" parent="PlayerStateMachine" unique_id=1474639381]
+script = ExtResource("7_x44r4")
+
+[node name="WallRunState" type="Node" parent="PlayerStateMachine" unique_id=915681351]
+script = ExtResource("8_761t5")
+
+[node name="NoClipState" type="Node" parent="PlayerStateMachine" unique_id=33759136]
+script = ExtResource("9_hacra")
