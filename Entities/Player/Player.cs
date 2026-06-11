@@ -22,6 +22,9 @@ public partial class Player : CharacterBody3D {
 	public HealthComponent Health = new HealthComponent(100);
 	public PlayerSprintComponent Sprint = new PlayerSprintComponent();
 	public PlayerInventory Inventory    = new PlayerInventory();
+	public JumpComponent Jump           = new JumpComponent(2);
+	public WallRunComponent WallRun;
+	public FovComponent Fov;       
 
 	private float MouseSensitivity = 0.005f; //TODO: Add this to options menu
 	private float Friction { // TODO: Should be based on ground so later ig
@@ -66,7 +69,8 @@ public partial class Player : CharacterBody3D {
 			SetupHUD();
 			Inventory.SelectedSlotChanged += OnSelectedSlotChanged;
 		}
-
+		Fov = new FovComponent(_Camera, _Camera.Fov);
+		WallRun = new WallRunComponent(this, _Camera, Jump);
 		Speed = 10.0f;
 		Sprint.SprintModifier = 1.5f;
 		JumpPower = 6f;
@@ -80,11 +84,17 @@ public partial class Player : CharacterBody3D {
 		if (!IsMultiplayerAuthority()) return;
 		if (_Noclip) {
 			HandleNoclip(delta);
+		} else if (WallRun.IsWallRunning) {
+			Vector3 velocity = WallRun.HandleWallRun((float)delta, Velocity);
+			WallRun.TryWallJump(ref velocity);
+			Velocity = velocity;
 		} else {
 			HandleGravity(delta);
 			HandleMovement(delta);
 			HandleJump(delta);
+			WallRun.TryStartWallRun(Velocity, IsOnFloor());
 		}
+		HandleFov(delta);
 		MoveAndSlide();
 	}
 
@@ -119,21 +129,29 @@ public partial class Player : CharacterBody3D {
 		bool isOnFloor = IsOnFloor();
 
 		if (_WasOnFloor && !isOnFloor) _CoyoteTimer = _CoyoteTime;
+		if (isOnFloor && !_WasOnFloor) Jump.OnLanded();
 		if (_CoyoteTimer > 0) _CoyoteTimer -= (float) delta;
 
 		if (Input.IsActionJustPressed("Jump")) _JumpBufferTimer = _JumpBufferTime;
         
 		if (_JumpBufferTimer > 0) _JumpBufferTimer -= (float) delta;
 		
-		if ((IsOnFloor() || _CoyoteTimer > 0) && _JumpBufferTimer > 0) {
+		if (_JumpBufferTimer > 0 && (isOnFloor || _CoyoteTimer > 0 || Jump.CanJump())) {
 			Vector3 velocity = Velocity;
 			velocity.Y = JumpPower;
 			Velocity = velocity;
-			_JumpBufferTimer = 0.0f;
-			_CoyoteTimer     = 0.0f;
+			Jump.ConsumeJump();
+			_JumpBufferTimer = 0f;
+			_CoyoteTimer = 0f;
 		}
 
 		_WasOnFloor = isOnFloor;
+	}
+
+	private void HandleFov(double delta) {
+		float currentSpeed = new Vector3(Velocity.X, 0, Velocity.Z).Length();
+		float maxSpeed = Speed * Sprint.SprintModifier;
+		Fov.Update((float)delta, currentSpeed, Speed, maxSpeed);
 	}
 
 	private void ToggleNoclip() {

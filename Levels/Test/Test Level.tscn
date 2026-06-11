@@ -29,6 +29,10 @@ uv1_triplanar = true
 material = SubResource("StandardMaterial3D_d062v")
 size = Vector2(50, 50)
 
+[sub_resource type="BoxMesh" id="BoxMesh_d062v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ujh0g"]
+
 [node name="TestLevel" type="Node" unique_id=1809980071]
 script = ExtResource("1_d062v")
 
@@ -52,3 +56,11 @@ shape = SubResource("BoxShape3D_d062v")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/StaticBody3D" unique_id=1937497561]
 transform = Transform3D(0.099999994, 0, 0, 0, 0.099999994, 0, 0, 0, 0.099999994, 0, 0.050700035, -0.0536)
 mesh = SubResource("PlaneMesh_3wipj")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Level/StaticBody3D" unique_id=667632255]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+mesh = SubResource("BoxMesh_d062v")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Level/StaticBody3D" unique_id=537195598]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+shape = SubResource("BoxShape3D_ujh0g")
