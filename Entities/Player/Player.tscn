@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://dbrcj8wrsawtd" path="res://Entities/Player/Player States/JumpState.cs" id="6_hj1c0"]
 [ext_resource type="Script" uid="uid://dti1s3woqgjmq" path="res://Entities/Player/Player States/InAirState.cs" id="7_x44r4"]
 [ext_resource type="Script" uid="uid://cgexl12wq4fof" path="res://Entities/Player/Player States/WallRunState.cs" id="8_761t5"]
+[ext_resource type="Script" uid="uid://df3prbwuhmsjw" path="res://Entities/Player/Player States/SlideState.cs" id="8_hacra"]
 [ext_resource type="Script" uid="uid://cqstggc1byvdo" path="res://Entities/Player/Player States/NoClipState.cs" id="9_hacra"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_u36tg"]
@@ -52,6 +53,9 @@ script = ExtResource("6_hj1c0")
 
 [node name="InAirState" type="Node" parent="PlayerStateMachine" unique_id=1474639381]
 script = ExtResource("7_x44r4")
+
+[node name="SlideState" type="Node" parent="PlayerStateMachine" unique_id=1473962486]
+script = ExtResource("8_hacra")
 
 [node name="WallRunState" type="Node" parent="PlayerStateMachine" unique_id=915681351]
 script = ExtResource("8_761t5")

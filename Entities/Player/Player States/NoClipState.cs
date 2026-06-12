@@ -21,6 +21,7 @@ public partial class NoClipState : PlayerState {
     public override void _PhysicsProcess(double delta) {
         if (!_Player.IsMultiplayerAuthority()) return;
 		_Player.Sprint.UpdateStamina((float)delta);
+		if (_Player.SlideCooldown > 0f) _Player.SlideCooldown -= (float)delta;
         Move(delta);
     }
 

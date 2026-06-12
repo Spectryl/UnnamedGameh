@@ -28,7 +28,7 @@ public partial class PlayerStateMachine : Node {
     private Dictionary<State, PlayerState> _States = new();
 
     public enum State {
-        IDLE, WALK, SPRINT, JUMP, INAIR, WALLRUN, NOCLIP
+        IDLE, WALK, SPRINT, JUMP, INAIR, SLIDE, WALLRUN, NOCLIP
     }
 
 	public override void _Ready() {

@@ -24,6 +24,7 @@ public partial class SprintState : PlayerState {
     }
 
     private void Applies(double delta) {
+		if (_Player.SlideCooldown > 0f) _Player.SlideCooldown -= (float)delta;
         if (_Player.JumpBufferTimer > 0f) {
             _Player.JumpBufferTimer -= (float)delta;
             if (_Player.IsOnFloor()) {
@@ -56,9 +57,8 @@ public partial class SprintState : PlayerState {
         if (direction != Vector3.Zero && _Player.IsOnFloor()) {
             velocity.X = Mathf.Lerp(velocity.X, direction.X * speed, _Player.Acceleration * (float)delta);
             velocity.Z = Mathf.Lerp(velocity.Z, direction.Z * speed, _Player.Acceleration * (float)delta);
-        } else {
-            TransitionTo(PlayerStateMachine.State.IDLE);
-        }
+        } else TransitionTo(PlayerStateMachine.State.IDLE);
+        
 
         _Player.Velocity = velocity;
     }
@@ -69,10 +69,17 @@ public partial class SprintState : PlayerState {
             _Player.JumpBufferTimer = _Player.JumpBufferTime;
             TransitionTo(PlayerStateMachine.State.JUMP);
         }
+
         if (@event.IsActionReleased("Sprint")) {
             _Player.WalkOrRun = PlayerStateMachine.State.WALK;
             TransitionTo(PlayerStateMachine.State.WALK);
         }
+
+		if (@event.IsActionPressed("Crouch") && _Player.SlideCooldown <= 0f) {
+			_Player.SlideDirection = (-_Player.Transform.Basis.Z).Normalized();
+			TransitionTo(PlayerStateMachine.State.SLIDE);
+		}
+
         if (@event.IsActionPressed("Noclip")) TransitionTo(PlayerStateMachine.State.NOCLIP);
     }
 }

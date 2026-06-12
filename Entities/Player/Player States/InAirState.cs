@@ -27,6 +27,7 @@ public partial class InAirState : PlayerState {
     }
 
     private void Applies(double delta) {
+		if (_Player.SlideCooldown > 0f) _Player.SlideCooldown -= (float)delta;
         if (!_Player.IsOnFloor()) {
             if (_Player.CoyoteTimer > 0f) _Player.CoyoteTimer -= (float)delta;
             if (_Player.JumpBufferTimer > 0f) _Player.JumpBufferTimer -= (float)delta;

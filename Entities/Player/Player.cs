@@ -30,6 +30,17 @@ public partial class Player : CharacterBody3D {
 	public bool IsWallJumping = false;
 	public int LastWallSide = 0;
 
+	// Sliding
+	// Add to Player fields:
+	public Vector3 SlideDirection = Vector3.Zero;
+	public float SlideDuration = 1.5f;
+	public float SlideTimer = 0f;
+	public float SlideCooldown = 0f;
+	public float SlideCooldownDuration = 1f;
+	public float SlideSpeed = 18f;
+	public float SlideDeceleration = 8f;
+	public RayCast3D CeilingCheck;
+
     // Locomotion
     public PlayerStateMachine.State WalkOrRun = PlayerStateMachine.State.WALK;
 
@@ -38,6 +49,7 @@ public partial class Player : CharacterBody3D {
     public PlayerSprintComponent Sprint = new PlayerSprintComponent();
     public PlayerInventory Inventory = new PlayerInventory();
 	public FovComponent Fov;
+	public float CameraDefaultY;
 
     // Node refs
     public Camera3D Camera;
@@ -83,6 +95,14 @@ public partial class Player : CharacterBody3D {
 		RightWallCheck.TargetPosition = new Vector3(1.0f, 0, 0);
 		RightWallCheck.CollisionMask = 1;
 		AddChild(RightWallCheck);
+
+		CeilingCheck = new RayCast3D();
+		CeilingCheck.TargetPosition = new Vector3(0, 1.2f, 0);
+		CeilingCheck.CollisionMask = 1;
+		AddChild(CeilingCheck);
+
+		CameraDefaultY = Camera.Position.Y;
+
         Sprint.SprintModifier = 1.5f;
         JumpsRemaining = MaxJumps;
     }

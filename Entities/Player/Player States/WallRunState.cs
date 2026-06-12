@@ -2,7 +2,6 @@ using Godot;
 
 public partial class WallRunState : PlayerState {
     public override PlayerStateMachine.State StateEnum => PlayerStateMachine.State.WALLRUN;
-
     private const float WallRunSpeed = 12f;
     private const float WallRunAcceleration = 10f;
     private const float WallRunFallGravityMultiplier = 0.1f;
@@ -43,6 +42,7 @@ public partial class WallRunState : PlayerState {
     }
 
     private void Applies(double delta) {
+		if (_Player.SlideCooldown > 0f) _Player.SlideCooldown -= (float)delta;
         CalculateWallForwardDir();
 
         _Player.WallRunTimer -= (float)delta;
