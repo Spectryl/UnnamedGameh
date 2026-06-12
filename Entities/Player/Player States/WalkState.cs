@@ -9,6 +9,7 @@ public partial class WalkState : PlayerState {
         _Player.WalkOrRun = PlayerStateMachine.State.WALK;
         _Player.JumpsRemaining = _Player.MaxJumps;
         _Player.CoyoteTimer = _Player.CoyoteTime;
+		_Player.LastWallSide = 0;
     }
 
     public override void ExitState() { }

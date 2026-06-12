@@ -4,11 +4,18 @@ public partial class JumpState : PlayerState {
     public override PlayerStateMachine.State StateEnum => PlayerStateMachine.State.JUMP;
     private Player _Player;
 
-    public override void EnterState(Player player) {
-        _Player = player;
-        _Player.FloorSnapLength = 0f;
-        Jump();
-    }
+	public override void EnterState(Player player) {
+		_Player = player;
+		_Player.FloorSnapLength = 0f;
+		if (_Player.IsWallJumping) {
+			WallJump();
+			_Player.IsWallJumping = false;
+		} else {
+			Jump();
+		}
+	}
+
+
 
     public override void ExitState() {
         _Player.FloorSnapLength = 1f;
@@ -66,11 +73,13 @@ public partial class JumpState : PlayerState {
 
 	private void WallCheck() {
 		if (_Player.IsOnFloor()) return;
-		if (_Player.LeftWallCheck.IsColliding() && !_Player.RightWallCheck.IsColliding()) {
+		if (_Player.LeftWallCheck.IsColliding() && !_Player.RightWallCheck.IsColliding() && _Player.LastWallSide != -1) {
 			_Player.WallSide = -1;
+			_Player.LastWallSide = 0;
 			TransitionTo(PlayerStateMachine.State.WALLRUN);
-		} else if (_Player.RightWallCheck.IsColliding() && !_Player.LeftWallCheck.IsColliding()) {
+		} else if (_Player.RightWallCheck.IsColliding() && !_Player.LeftWallCheck.IsColliding() && _Player.LastWallSide != 1) {
 			_Player.WallSide = 1;
+			_Player.LastWallSide = 0;
 			TransitionTo(PlayerStateMachine.State.WALLRUN);
 		}
 	}
@@ -83,6 +92,19 @@ public partial class JumpState : PlayerState {
         _Player.Velocity = velocity;
         _Player.JumpBufferTimer = 0f;
     }
+
+	private void WallJump() {
+		Vector3 velocity = _Player.Velocity;
+		Vector3 horizontal = new Vector3(velocity.X, 0f, velocity.Z);
+		float intoWall = horizontal.Dot(_Player.WallNormal);
+		if (intoWall < 0f) horizontal -= _Player.WallNormal * intoWall;
+		horizontal += _Player.WallNormal * 8f;
+		velocity.X = horizontal.X;
+		velocity.Z = horizontal.Z;
+		velocity.Y = _Player.JumpPower;
+		_Player.Velocity = velocity;
+		_Player.LastWallSide = _Player.WallSide;
+	}
 
     public override void _UnhandledInput(InputEvent @event) {
         if (_Player == null || !_Player.IsMultiplayerAuthority()) return;

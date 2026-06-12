@@ -8,6 +8,7 @@ public partial class IdleState : PlayerState {
         _Player = player;
         _Player.JumpsRemaining = _Player.MaxJumps;
         _Player.CoyoteTimer = 0f;
+		_Player.LastWallSide = 0;
     }
 
     public override void ExitState() { }

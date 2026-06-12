@@ -27,6 +27,8 @@ public partial class Player : CharacterBody3D {
 	public Vector3 WallForwardDir = Vector3.Zero;
 	public RayCast3D LeftWallCheck;
 	public RayCast3D RightWallCheck;
+	public bool IsWallJumping = false;
+	public int LastWallSide = 0;
 
     // Locomotion
     public PlayerStateMachine.State WalkOrRun = PlayerStateMachine.State.WALK;
@@ -73,12 +75,12 @@ public partial class Player : CharacterBody3D {
 		Fov = new FovComponent(Camera, Camera.Fov);
 
 		LeftWallCheck = new RayCast3D();
-		LeftWallCheck.TargetPosition = new Vector3(-1.2f, 0, 0);
+		LeftWallCheck.TargetPosition = new Vector3(-1.0f, 0, 0);
 		LeftWallCheck.CollisionMask = 1;
 		AddChild(LeftWallCheck);
 
 		RightWallCheck = new RayCast3D();
-		RightWallCheck.TargetPosition = new Vector3(1.2f, 0, 0);
+		RightWallCheck.TargetPosition = new Vector3(1.0f, 0, 0);
 		RightWallCheck.CollisionMask = 1;
 		AddChild(RightWallCheck);
         Sprint.SprintModifier = 1.5f;
@@ -113,9 +115,15 @@ public partial class Player : CharacterBody3D {
         Camera.Rotation = rotation;
     }
 	public void UpdateFov(float delta) {
-		float currentSpeed = new Vector3(Velocity.X, 0, Velocity.Z).Length();
-		float maxSpeed = Speed * Sprint.SprintModifier;
-		Fov.Update(delta, currentSpeed, Speed, maxSpeed);
+		float targetFov;
+		if (Input.IsActionPressed("Sprint") && !Sprint.IsDepleted) {
+			float currentSpeed = new Vector3(Velocity.X, 0, Velocity.Z).Length();
+			float maxSpeed = Speed * Sprint.SprintModifier;
+			targetFov = Fov.BaseFov + Mathf.Clamp((currentSpeed - Speed) / (maxSpeed - Speed), 0f, 1f) * 15f;
+		} else {
+			targetFov = Fov.BaseFov;
+		}
+		Camera.Fov = Mathf.Lerp(Camera.Fov, targetFov, 8f * delta);
 	}
 
 

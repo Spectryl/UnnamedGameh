@@ -16,13 +16,15 @@ public partial class WallRunState : PlayerState {
         _Player.JumpsRemaining = _Player.MaxJumps;
         _Player.CoyoteTimer = _Player.CoyoteTime;
         _Player.WallRunTimer = _Player.WallRunDuration;
+        _Player.IsWallJumping = false;
 
         CalculateWallForwardDir();
+
         Vector3 velocity = _Player.Velocity;
         velocity.Y = 0f;
         _Player.Velocity = velocity;
 
-        TiltCamera(_Player.WallSide == -1 ? CameraTiltAngle : CameraTiltAngle);
+        TiltCamera(_Player.WallSide == -1 ? -CameraTiltAngle : CameraTiltAngle);
     }
 
     public override void ExitState() {
@@ -34,7 +36,7 @@ public partial class WallRunState : PlayerState {
 
     public override void _PhysicsProcess(double delta) {
         if (!_Player.IsMultiplayerAuthority()) return;
-		_Player.Sprint.UpdateStamina((float)delta);
+        _Player.Sprint.UpdateStamina((float)delta);
         Applies(delta);
         ApplyGravity(delta);
         Move(delta);
@@ -45,15 +47,13 @@ public partial class WallRunState : PlayerState {
 
         _Player.WallRunTimer -= (float)delta;
         if (_Player.WallRunTimer <= 0f) {
+            _Player.LastWallSide = _Player.WallSide;
             TransitionTo(PlayerStateMachine.State.INAIR);
             return;
         }
 
-        bool onWall = _Player.WallSide == -1
-            ? _Player.LeftWallCheck.IsColliding()
-            : _Player.RightWallCheck.IsColliding();
-
-        if (!onWall || _Player.IsOnFloor()) {
+        bool noWall = !_Player.LeftWallCheck.IsColliding() && !_Player.RightWallCheck.IsColliding();
+        if (noWall || _Player.IsOnFloor()) {
             TransitionTo(PlayerStateMachine.State.INAIR);
             return;
         }
@@ -79,9 +79,10 @@ public partial class WallRunState : PlayerState {
     }
 
     private void CalculateWallForwardDir() {
-        _Player.WallNormal = _Player.WallSide == -1
-            ? _Player.LeftWallCheck.GetCollisionNormal()
-            : _Player.RightWallCheck.GetCollisionNormal();
+        if (_Player.WallSide == -1 && _Player.LeftWallCheck.IsColliding())
+            _Player.WallNormal = _Player.LeftWallCheck.GetCollisionNormal();
+        else if (_Player.WallSide == 1 && _Player.RightWallCheck.IsColliding())
+            _Player.WallNormal = _Player.RightWallCheck.GetCollisionNormal();
 
         Vector3 velocityDir = _Player.Velocity.Normalized();
         _Player.WallForwardDir = (velocityDir - _Player.WallNormal * velocityDir.Dot(_Player.WallNormal)).Normalized();
@@ -95,7 +96,10 @@ public partial class WallRunState : PlayerState {
 
     public override void _UnhandledInput(InputEvent @event) {
         if (_Player == null || !_Player.IsMultiplayerAuthority()) return;
-        if (@event.IsActionPressed("Jump")) TransitionTo(PlayerStateMachine.State.JUMP);
+        if (@event.IsActionPressed("Jump")) {
+            _Player.IsWallJumping = true;
+            TransitionTo(PlayerStateMachine.State.JUMP);
+        }
         if (@event.IsActionPressed("Noclip")) TransitionTo(PlayerStateMachine.State.NOCLIP);
     }
 }

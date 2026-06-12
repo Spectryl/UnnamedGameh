@@ -68,11 +68,13 @@ public partial class InAirState : PlayerState {
 
 	private void WallCheck() {
 		if (_Player.IsOnFloor()) return;
-		if (_Player.LeftWallCheck.IsColliding() && !_Player.RightWallCheck.IsColliding()) {
+		if (_Player.LeftWallCheck.IsColliding() && !_Player.RightWallCheck.IsColliding() && _Player.LastWallSide != -1) {
 			_Player.WallSide = -1;
+			_Player.LastWallSide = 0;
 			TransitionTo(PlayerStateMachine.State.WALLRUN);
-		} else if (_Player.RightWallCheck.IsColliding() && !_Player.LeftWallCheck.IsColliding()) {
+		} else if (_Player.RightWallCheck.IsColliding() && !_Player.LeftWallCheck.IsColliding() && _Player.LastWallSide != 1) {
 			_Player.WallSide = 1;
+			_Player.LastWallSide = 0;
 			TransitionTo(PlayerStateMachine.State.WALLRUN);
 		}
 	}
