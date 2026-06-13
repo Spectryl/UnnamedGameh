@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cw8s1kaccec10"]
 
-[ext_resource type="Script" uid="uid://ctv4r66l42nvj" path="res://Systems/Chat/ChatMenu.cs" id="1_g43ss"]
+[ext_resource type="Script" uid="uid://ctv4r66l42nvj" path="res://Systems/Chat/LobbyChatMenu.cs" id="1_4sfgr"]
 
-[node name="ChatMenu" type="Control" unique_id=1535168622]
+[node name="LobbyChatMenu" type="Control" unique_id=1535168622]
 layout_mode = 3
 anchor_right = 0.35300002
 anchor_bottom = 0.333
@@ -10,7 +10,7 @@ offset_right = -451.84003
 offset_bottom = -239.76001
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_g43ss")
+script = ExtResource("1_4sfgr")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=988259840]
 layout_mode = 0

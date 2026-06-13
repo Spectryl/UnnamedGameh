@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-public partial class ChatMenu : Control {
+public partial class LobbyChatMenu : Control {
 	private VBoxContainer _ChatHistoryContainer;
 	private LineEdit _ChatEntry;
 	private Button _SubmitButton;

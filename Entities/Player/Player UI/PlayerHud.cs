@@ -6,6 +6,7 @@ public partial class PlayerHud : CanvasLayer {
     private List<InventorySlot> _Slots;
     private StatBar _HealthBar;
     private StatBar _StaminaBar;
+    private GameChatMenu _GameChatMenu;
 
 
     public override void _Ready() {
@@ -18,6 +19,7 @@ public partial class PlayerHud : CanvasLayer {
 
         _HealthBar = GetNode<StatBar>("Control/Health/HBoxContainer/HealthBar");
         _StaminaBar = GetNode<StatBar>("Control/Stamina/HBoxContainer/StaminaBar");
+        _GameChatMenu = GetNode<GameChatMenu>("Control/Chat");
 
     }
 

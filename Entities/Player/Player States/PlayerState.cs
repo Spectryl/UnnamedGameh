@@ -8,4 +8,5 @@ public abstract partial class PlayerState : Node {
     public abstract void ExitState();
     public abstract override void _Process(double delta);
     public abstract override void _PhysicsProcess(double delta);
+    
 }
