@@ -30,7 +30,7 @@ public partial class HeldApple : HeldItem {
     }
 
     public override void _UnhandledInput(InputEvent @event) {
-        if (@event.IsActionPressed("Interact")) PerformAction(HeldItemAction.InteractUse);
+        if (Input.Interact) PerformAction(HeldItemAction.InteractUse);
     }
 
 	public override void OnInteractUse() {

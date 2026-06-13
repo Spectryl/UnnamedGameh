@@ -104,12 +104,12 @@ public partial class SlideState : PlayerState {
 
     public override void _UnhandledInput(InputEvent @event) {
         if (_Player == null || !_Player.IsMultiplayerAuthority()) return;
-        if (@event.IsActionPressed("Jump")) {
+        if (_Player.InputHandler.Jump) {
             if (_SlopeAngle > MaxSlopeAngle || !_Player.CeilingCheck.IsColliding()) {
                 _Player.SlideDirection = Vector3.Zero;
                 TransitionTo(PlayerStateMachine.State.JUMP);
             }
         }
-        if (@event.IsActionPressed("Noclip")) TransitionTo(PlayerStateMachine.State.NOCLIP);
+        if (_Player.InputHandler.Noclip) TransitionTo(PlayerStateMachine.State.NOCLIP);
     }
 }

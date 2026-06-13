@@ -25,7 +25,7 @@ public partial class HeldItem : Node3D {
 	}
 
 	public void PerformAction(HeldItemAction action) => Rpc(nameof(PerformAction), (int)action);
-	public Player GetPlayer() {
+	protected Player GetPlayer() {
         Node node = GetParent();
         while (node != null) {
             if (node is Player player) return player;
@@ -33,4 +33,5 @@ public partial class HeldItem : Node3D {
         }
         return null;
     }
+	protected PlayerInputHandler Input => GetPlayer().InputHandler;
 }

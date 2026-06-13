@@ -45,7 +45,7 @@ public partial class WalkState : PlayerState {
     }
 
     private void Move(double delta) {
-        Vector2 input = Input.GetVector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward");
+        Vector2 input = _Player.InputHandler.MoveInput;
         Vector3 direction = (_Player.Transform.Basis * new Vector3(input.X, 0, input.Y)).Normalized();
         Vector3 velocity = _Player.Velocity;
 
@@ -61,17 +61,14 @@ public partial class WalkState : PlayerState {
 
     public override void _UnhandledInput(InputEvent @event) {
         if (_Player == null || !_Player.IsMultiplayerAuthority()) return;
-		
-        if (@event.IsActionPressed("Jump")) {
+        if (_Player.InputHandler.Jump) {
             _Player.JumpBufferTimer = _Player.JumpBufferTime;
             TransitionTo(PlayerStateMachine.State.JUMP);
         }
-
-        if (@event.IsActionPressed("Sprint")) {
+        if (_Player.InputHandler.Sprint) {
             _Player.WalkOrRun = PlayerStateMachine.State.SPRINT;
             TransitionTo(PlayerStateMachine.State.SPRINT);
         }
-
-        if (@event.IsActionPressed("Noclip")) TransitionTo(PlayerStateMachine.State.NOCLIP);
+        if (_Player.InputHandler.Noclip) TransitionTo(PlayerStateMachine.State.NOCLIP);
     }
 }

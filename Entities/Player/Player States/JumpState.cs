@@ -44,7 +44,7 @@ public partial class JumpState : PlayerState {
             }
         }
         if (_Player.IsOnFloor()) {
-            Vector2 input = Input.GetVector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward");
+            Vector2 input = _Player.InputHandler.MoveInput;
             TransitionTo(input != Vector2.Zero ? _Player.WalkOrRun : PlayerStateMachine.State.IDLE);
             return;
         }
@@ -57,7 +57,7 @@ public partial class JumpState : PlayerState {
 
 	private void Move(double delta) {
 		if (_Player.IsOnFloor()) return;
-		Vector2 input = Input.GetVector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward");
+		Vector2 input = _Player.InputHandler.MoveInput;
 		Vector3 direction = (_Player.Transform.Basis * new Vector3(input.X, 0, input.Y)).Normalized();
 		Vector3 velocity = _Player.Velocity;
 
@@ -107,12 +107,11 @@ public partial class JumpState : PlayerState {
 		_Player.LastWallSide = _Player.WallSide;
 	}
 
-    public override void _UnhandledInput(InputEvent @event) {
-        if (_Player == null || !_Player.IsMultiplayerAuthority()) return;
-        if (@event.IsActionPressed("Jump") && _Player.JumpsRemaining > 0) Jump();
-        if (@event.IsActionPressed("Noclip")) TransitionTo(PlayerStateMachine.State.NOCLIP);
-		if (@event.IsActionPressed("Sprint")) _Player.WalkOrRun = PlayerStateMachine.State.SPRINT;
-		if (@event.IsActionReleased("Sprint")) _Player.WalkOrRun = PlayerStateMachine.State.WALK;
-
-    }
+	public override void _UnhandledInput(InputEvent @event) {
+		if (_Player == null || !_Player.IsMultiplayerAuthority()) return;
+		if (_Player.InputHandler.Jump && _Player.JumpsRemaining > 0) Jump();
+		if (_Player.InputHandler.Noclip) TransitionTo(PlayerStateMachine.State.NOCLIP);
+		if (_Player.InputHandler.Sprint) _Player.WalkOrRun = PlayerStateMachine.State.SPRINT;
+		if (_Player.InputHandler.SprintReleased) _Player.WalkOrRun = PlayerStateMachine.State.WALK;
+	}
 }

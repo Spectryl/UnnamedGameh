@@ -67,7 +67,7 @@ public partial class WallRunState : PlayerState {
     }
 
     private void Move(double delta) {
-        if (!Input.IsActionPressed("MoveForward")) {
+        if (!_Player.InputHandler.MoveForward) {
             TransitionTo(PlayerStateMachine.State.INAIR);
             return;
         }
@@ -96,10 +96,10 @@ public partial class WallRunState : PlayerState {
 
     public override void _UnhandledInput(InputEvent @event) {
         if (_Player == null || !_Player.IsMultiplayerAuthority()) return;
-        if (@event.IsActionPressed("Jump")) {
+        if (_Player.InputHandler.Jump) {
             _Player.IsWallJumping = true;
             TransitionTo(PlayerStateMachine.State.JUMP);
         }
-        if (@event.IsActionPressed("Noclip")) TransitionTo(PlayerStateMachine.State.NOCLIP);
+        if (_Player.InputHandler.Noclip) TransitionTo(PlayerStateMachine.State.NOCLIP);
     }
 }

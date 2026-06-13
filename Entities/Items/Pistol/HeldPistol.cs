@@ -18,8 +18,8 @@ public partial class HeldPistol : HeldItem {
     }
 
     public override void _UnhandledInput(InputEvent @event) {
-        if (@event.IsActionPressed("LeftClick") && !_IsReloading) PerformAction(HeldItemAction.PrimaryUse);
-        if (@event.IsActionPressed("Interact2") && !_IsReloading) PerformAction(HeldItemAction.SecondaryInteractUse);
+        if (Input.LeftClick && !_IsReloading) PerformAction(HeldItemAction.PrimaryUse);
+        if (Input.Interact2 && !_IsReloading) PerformAction(HeldItemAction.SecondaryInteractUse);
     }
 
     public override void OnPrimaryUse() {

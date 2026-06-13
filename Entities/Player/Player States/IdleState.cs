@@ -47,17 +47,16 @@ public partial class IdleState : PlayerState {
     }
 
     private void Move() {
-        Vector2 input = Input.GetVector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward");
-        if (input == Vector2.Zero) return;
+        if (_Player.InputHandler.MoveInput == Vector2.Zero) return;
         TransitionTo(_Player.WalkOrRun);
     }
 
     public override void _UnhandledInput(InputEvent @event) {
         if (_Player == null || !_Player.IsMultiplayerAuthority()) return;
-        if (@event.IsActionPressed("Jump")) {
+        if (_Player.InputHandler.Jump) {
             _Player.JumpBufferTimer = _Player.JumpBufferTime;
             TransitionTo(PlayerStateMachine.State.JUMP);
         }
-        if (@event.IsActionPressed("Noclip")) TransitionTo(PlayerStateMachine.State.NOCLIP);
+        if (_Player.InputHandler.Noclip) TransitionTo(PlayerStateMachine.State.NOCLIP);
     }
 }

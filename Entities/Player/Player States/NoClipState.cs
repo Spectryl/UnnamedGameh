@@ -26,11 +26,11 @@ public partial class NoClipState : PlayerState {
     }
 
     private void Move(double delta) {
-        Vector2 input = Input.GetVector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward");
+        Vector2 input = _Player.InputHandler.MoveInput;
         Vector3 direction = (_Player.Camera.GlobalTransform.Basis * new Vector3(input.X, 0, input.Y)).Normalized();
-        if (Input.IsActionPressed("Jump")) direction += Vector3.Up;
-        if (Input.IsKeyPressed(Key.Ctrl)) direction += Vector3.Down;
-        float speed = Input.IsActionPressed("Sprint")
+        if (_Player.InputHandler.JumpHeld) direction += Vector3.Up;
+        if (_Player.InputHandler.Crouch) direction += Vector3.Down;
+        float speed = _Player.InputHandler.Sprint
             ? _Player.Speed * _Player.Sprint.SprintModifier
             : _Player.Speed;
         _Player.Velocity = direction * speed;
@@ -38,6 +38,6 @@ public partial class NoClipState : PlayerState {
 
     public override void _UnhandledInput(InputEvent @event) {
         if (_Player == null || !_Player.IsMultiplayerAuthority()) return;
-        if (@event.IsActionPressed("Noclip")) TransitionTo(PlayerStateMachine.State.IDLE);
+        if (_Player.InputHandler.Noclip) TransitionTo(PlayerStateMachine.State.IDLE);
     }
 }

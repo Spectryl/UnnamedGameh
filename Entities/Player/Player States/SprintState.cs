@@ -49,7 +49,7 @@ public partial class SprintState : PlayerState {
     }
 
     private void Move(double delta) {
-        Vector2 input = Input.GetVector("StrafeLeft", "StrafeRight", "MoveForward", "MoveBackward");
+        Vector2 input = _Player.InputHandler.MoveInput;
         Vector3 direction = (_Player.Transform.Basis * new Vector3(input.X, 0, input.Y)).Normalized();
         Vector3 velocity = _Player.Velocity;
         float speed = _Player.Speed * _Player.Sprint.SprintModifier;
@@ -65,21 +65,18 @@ public partial class SprintState : PlayerState {
 
     public override void _UnhandledInput(InputEvent @event) {
         if (_Player == null || !_Player.IsMultiplayerAuthority()) return;
-        if (@event.IsActionPressed("Jump")) {
+        if (_Player.InputHandler.Jump) {
             _Player.JumpBufferTimer = _Player.JumpBufferTime;
             TransitionTo(PlayerStateMachine.State.JUMP);
         }
-
-        if (@event.IsActionReleased("Sprint")) {
+        if (_Player.InputHandler.SprintReleased) {
             _Player.WalkOrRun = PlayerStateMachine.State.WALK;
             TransitionTo(PlayerStateMachine.State.WALK);
         }
-
-		if (@event.IsActionPressed("Crouch") && _Player.SlideCooldown <= 0f) {
-			_Player.SlideDirection = (-_Player.Transform.Basis.Z).Normalized();
-			TransitionTo(PlayerStateMachine.State.SLIDE);
-		}
-
-        if (@event.IsActionPressed("Noclip")) TransitionTo(PlayerStateMachine.State.NOCLIP);
+        if (_Player.InputHandler.Crouch && _Player.SlideCooldown <= 0f) {
+            _Player.SlideDirection = (-_Player.Transform.Basis.Z).Normalized();
+            TransitionTo(PlayerStateMachine.State.SLIDE);
+        }
+        if (_Player.InputHandler.Noclip) TransitionTo(PlayerStateMachine.State.NOCLIP);
     }
 }

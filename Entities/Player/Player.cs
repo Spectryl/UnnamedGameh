@@ -49,6 +49,7 @@ public partial class Player : CharacterBody3D {
     public PlayerSprintComponent Sprint = new PlayerSprintComponent();
     public PlayerInventory Inventory = new PlayerInventory();
 	public FovComponent Fov;
+    public PlayerInputHandler InputHandler;
 	public float CameraDefaultY;
 
     // Node refs
@@ -113,6 +114,9 @@ public partial class Player : CharacterBody3D {
 
         Sprint.SprintModifier = 1.5f;
         JumpsRemaining = MaxJumps;
+
+        InputHandler = new PlayerInputHandler();
+        AddChild(InputHandler);
     }
 
     public override void _ExitTree() {
@@ -128,12 +132,11 @@ public partial class Player : CharacterBody3D {
     public override void _UnhandledInput(InputEvent @event) {
         if (!IsMultiplayerAuthority()) return;
         HandleMouseLook(@event);
-        if (@event.IsActionPressed("Interact")) TryInteract();
-        if (@event.IsActionPressed("Drop")) TryDrop();
-        if (@event.IsActionPressed("ScrollUp")) Inventory.SelectPrevious();
-        if (@event.IsActionPressed("ScrollDown")) Inventory.SelectNext();
-        for (int i = 0; i < Inventory.Size; i++)
-            if (@event.IsActionPressed($"Slot{i + 1}")) Inventory.SelectSlot(i);
+        if (InputHandler.Interact) TryInteract();
+        if (InputHandler.Drop) TryDrop();
+        if (InputHandler.ScrollUp) Inventory.SelectPrevious();
+        if (InputHandler.ScrollDown) Inventory.SelectNext();
+        if (InputHandler.SlotPressed >= 0) Inventory.SelectSlot(InputHandler.SlotPressed);
     }
 
     public float GetCameraRotationX() => Camera.Rotation.X;
