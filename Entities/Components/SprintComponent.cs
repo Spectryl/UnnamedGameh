@@ -22,10 +22,19 @@ public class SprintComponent {
 
 public class PlayerSprintComponent : SprintComponent {
     public float MaxStamina = 100.0f;
-    public float Stamina { get; private set; }
+    public float Stamina {
+        get { return _Stamina; }
+        private set {
+            float oldStamina = _Stamina;
+            _Stamina = value;
+            if (!Mathf.IsEqualApprox(oldStamina, _Stamina)) OnStaminaChanged?.Invoke(oldStamina, _Stamina);
+        }
+    }
+	private float _Stamina;
     public float DrainRate = 20.0f;
     public float RegenRate = 10.0f;
     public bool IsDepleted { get; private set; } = false;
+	public event Action<float, float> OnStaminaChanged;
 
     public PlayerSprintComponent(float sprintModifier = 1.35f) : base(sprintModifier) {
         Stamina = MaxStamina;

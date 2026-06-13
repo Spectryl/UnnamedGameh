@@ -14,6 +14,7 @@ public partial class ServerManager : Node {
 		GameManager.Instance.Multiplayer.ServerDisconnected += OnServerDisconnected;
     }
 	public static bool IsHost() {
+		if (GameManager.Instance.Multiplayer.MultiplayerPeer == null) return false;
 		return GameManager.Instance.Multiplayer.GetUniqueId() == 1;
 	}
 

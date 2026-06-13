@@ -59,6 +59,8 @@ public partial class Player : CharacterBody3D {
     private Node3D _HandSlot;
     private HeldItem _HeldItem;
     private PlayerStateMachine _StateMachine;
+	private Node3D             _Model;
+    private NameTag            _NameTag;
 
     public override void _Ready() {
         GameManager.PlayerList.Add(this);
@@ -69,6 +71,7 @@ public partial class Player : CharacterBody3D {
         _InteractRayCast = GetNode<RayCast3D>("Camera3D/RayCast3D");
         _HandSlot = GetNode<Node3D>("Camera3D/HandSlot");
         _StateMachine = GetNode<PlayerStateMachine>("PlayerStateMachine");
+		_Model = GetNode<Node3D>("Thanga18");
 
         SetMultiplayerAuthority(int.Parse(Name));
 
@@ -82,6 +85,7 @@ public partial class Player : CharacterBody3D {
             Input.MouseMode = Input.MouseModeEnum.Captured;
             SetupHUD();
             Inventory.SelectedSlotChanged += OnSelectedSlotChanged;
+			_Model.Visible = false;
         }
 
 		Fov = new FovComponent(Camera, Camera.Fov);
@@ -100,6 +104,10 @@ public partial class Player : CharacterBody3D {
 		CeilingCheck.TargetPosition = new Vector3(0, 1.2f, 0);
 		CeilingCheck.CollisionMask = 1;
 		AddChild(CeilingCheck);
+
+        _NameTag = new NameTag();
+        AddChild(_NameTag, true);
+        _NameTag.Setup(IsMultiplayerAuthority());
 
 		CameraDefaultY = Camera.Position.Y;
 
@@ -211,7 +219,7 @@ public partial class Player : CharacterBody3D {
     private void SetupHUD() {
         PlayerHud playerHud = GD.Load<PackedScene>(UIDS.PlayerHud).Instantiate<PlayerHud>();
         AddChild(playerHud);
-        playerHud.Setup(Inventory);
+        playerHud.Setup(Inventory, Health, Sprint);
     }
 
     public void GiveItem(ItemData item) {

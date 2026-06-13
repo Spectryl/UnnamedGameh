@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cgexl12wq4fof" path="res://Entities/Player/Player States/WallRunState.cs" id="8_761t5"]
 [ext_resource type="Script" uid="uid://df3prbwuhmsjw" path="res://Entities/Player/Player States/SlideState.cs" id="8_hacra"]
 [ext_resource type="Script" uid="uid://cqstggc1byvdo" path="res://Entities/Player/Player States/NoClipState.cs" id="9_hacra"]
+[ext_resource type="PackedScene" uid="uid://cxycrd57spbqs" path="res://Assets/Models/Characters/Thanga18.glb" id="11_jynvv"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_u36tg"]
 
@@ -20,7 +21,11 @@ script = ExtResource("1_e5kic")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1388515607]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_u36tg")
+
+[node name="Thanga18" parent="." unique_id=443035656 instance=ExtResource("11_jynvv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2070529558]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

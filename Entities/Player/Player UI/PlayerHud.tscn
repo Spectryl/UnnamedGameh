@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://cg2kl2na4igmr"]
+
+[ext_resource type="Script" uid="uid://dwst7pn2pfjsm" path="res://Entities/Player/Player UI/PlayerHud.cs" id="1_yb4cm"]
+[ext_resource type="Texture2D" uid="uid://dvuwlenlsa7lg" path="res://Entities/Player/Player UI/Crosshair.png" id="2_cqks7"]
+[ext_resource type="PackedScene" uid="uid://nflibirwao56" path="res://Entities/Player/Player UI/InventorySlot.tscn" id="3_kp3rd"]
+[ext_resource type="Script" uid="uid://4yvpm0v57uih" path="res://Misc/StatBar.cs" id="4_vuje7"]
+
+[node name="PlayerHud" type="CanvasLayer" unique_id=90520989]
+script = ExtResource("1_yb4cm")
+
+[node name="Control" type="Control" parent="." unique_id=184384215]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CrosshairContainer" type="CenterContainer" parent="Control" unique_id=1474954207]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CrosshairTexture" type="TextureRect" parent="Control/CrosshairContainer" unique_id=1827961663]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("2_cqks7")
+stretch_mode = 4
+
+[node name="Inventory" type="MarginContainer" parent="Control" unique_id=749232629]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 640.0
+offset_right = 362.0
+offset_bottom = 704.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Inventory" unique_id=1785618138]
+layout_mode = 2
+
+[node name="InventorySlot1" parent="Control/Inventory/HBoxContainer" unique_id=936844853 instance=ExtResource("3_kp3rd")]
+layout_mode = 2
+
+[node name="InventorySlot2" parent="Control/Inventory/HBoxContainer" unique_id=754798668 instance=ExtResource("3_kp3rd")]
+layout_mode = 2
+
+[node name="InventorySlot3" parent="Control/Inventory/HBoxContainer" unique_id=1275544630 instance=ExtResource("3_kp3rd")]
+layout_mode = 2
+
+[node name="InventorySlot4" parent="Control/Inventory/HBoxContainer" unique_id=1142089600 instance=ExtResource("3_kp3rd")]
+layout_mode = 2
+
+[node name="InventorySlot5" parent="Control/Inventory/HBoxContainer" unique_id=1857900476 instance=ExtResource("3_kp3rd")]
+layout_mode = 2
+
+[node name="Health" type="MarginContainer" parent="Control" unique_id=1701162629]
+layout_mode = 0
+offset_left = 868.0
+offset_top = 619.0
+offset_right = 1268.0
+offset_bottom = 659.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Health" unique_id=1997934467]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Control/Health/HBoxContainer" unique_id=139335099]
+layout_mode = 2
+
+[node name="HealthBar" type="Control" parent="Control/Health/HBoxContainer" unique_id=1718277827]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+script = ExtResource("4_vuje7")
+Percent = 0.5
+BackgroundColor = Color(0.07450981, 0, 0.003921569, 0.8)
+Skew = 6.0
+metadata/_custom_type_script = "uid://4yvpm0v57uih"
+
+[node name="Stamina" type="MarginContainer" parent="Control" unique_id=1423594281]
+layout_mode = 0
+offset_left = 868.0
+offset_top = 668.0
+offset_right = 1268.0
+offset_bottom = 708.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/Stamina" unique_id=1646876882]
+layout_mode = 2
+alignment = 1
+
+[node name="StaminaBar" type="Control" parent="Control/Stamina/HBoxContainer" unique_id=1230065745]
+custom_minimum_size = Vector2(300, 30)
+layout_mode = 2
+script = ExtResource("4_vuje7")
+Percent = 0.5
+ColorLeft = Color(0.90189004, 0.59263843, 3.85046e-07, 1)
+ColorRight = Color(0.9, 0.7613999, 0.504, 1)
+BackgroundColor = Color(0.07450981, 0, 0.003921569, 0.8)
+Skew = 6.0
+metadata/_custom_type_script = "uid://4yvpm0v57uih"
