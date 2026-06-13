@@ -19,6 +19,19 @@ public partial class PlayerSyncManager : Node {
         SyncLocalPlayer();
     }
 
+    private static float LerpAngle(float from, float to, float weight) {
+        float delta = ((to - from + Mathf.Pi * 3f) % (Mathf.Pi * 2f)) - Mathf.Pi;
+        return from + delta * weight;
+    }
+
+    private static Vector3 LerpRotation(Vector3 from, Vector3 to, float weight) {
+        return new Vector3(
+            LerpAngle(from.X, to.X, weight),
+            LerpAngle(from.Y, to.Y, weight),
+            LerpAngle(from.Z, to.Z, weight)
+        );
+    }
+
     private void SyncLocalPlayer() {
         Player localPlayer = GameManager.PlayerList.Find(p => p.Name == _LocalId);
         if (localPlayer == null) return;
@@ -54,7 +67,7 @@ public partial class PlayerSyncManager : Node {
         float zRotation = BitConverter.ToSingle(data, 20);
         float cameraX   = BitConverter.ToSingle(data, 24);
         player.GlobalPosition = player.GlobalPosition.Lerp(new Vector3(xPosition, yPosition, zPosition), 0.3f);
-        player.GlobalRotation = player.GlobalRotation.Lerp(new Vector3(xRotation, yRotation, zRotation), 0.3f);
+        player.GlobalRotation = LerpRotation(player.GlobalRotation, new Vector3(xRotation, yRotation, zRotation), 0.3f);
         player.SetCameraRotationX(cameraX);
     }
 }

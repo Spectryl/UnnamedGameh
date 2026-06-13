@@ -21,6 +21,19 @@ public partial class RigidBodySyncManager : Node {
 	public static void Register(RigidBody3D body)   => Instance._RigidBodies.Add(body);
     public static void Unregister(RigidBody3D body) => Instance._RigidBodies.Remove(body);
 
+    private static float LerpAngle(float from, float to, float weight) {
+        float delta = ((to - from + Mathf.Pi * 3f) % (Mathf.Pi * 2f)) - Mathf.Pi;
+        return from + delta * weight;
+    }
+
+    private static Vector3 LerpRotation(Vector3 from, Vector3 to, float weight) {
+        return new Vector3(
+            LerpAngle(from.X, to.X, weight),
+            LerpAngle(from.Y, to.Y, weight),
+            LerpAngle(from.Z, to.Z, weight)
+        );
+    }
+
 	private void SyncBodies() {
         int count = _RigidBodies.Count;
         if (count == 0) return;
@@ -56,8 +69,7 @@ public partial class RigidBodySyncManager : Node {
             offset += 24;
             RigidBody3D body = _RigidBodies[i];            
             body.GlobalPosition = body.GlobalPosition.Lerp(new Vector3(px, py, pz), 0.3f);
-            body.GlobalRotation = body.GlobalRotation.Lerp(new Vector3(rx, ry, rz), 0.3f);
+            body.GlobalRotation = LerpRotation(body.GlobalRotation, new Vector3(rx, ry, rz), 0.3f);
         }
     }
 }
-
